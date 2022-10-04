@@ -1,24 +1,29 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
-function App() {
+const App = (): JSX.Element => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className='w-screen h-screen pt-36'>
+      <div className='bg-white w-1/3 h-4/6 shadow-md mx-auto'>
+        <h1 className='text-center font-bold text-[#5b6574] text-xl border-b-2 border-[#dee0e4] py-3'>Login</h1>
+        <form action="/auth" method='post' className='flex flex-col justify-center py-14'>
+          <div className='flex justify-center w-full px-8'>
+            <label htmlFor="username" className='bg-[#3274d6] flex justify-center py-3 px-3'>
+              <FontAwesomeIcon icon={faUser} className="text-white"/>
+            </label>
+            <input type="text" name="username" placeholder="Username" id="username" className='border border-[#dee0e4] px-3 text-sm w-full' required />
+          </div>
+          <div className='flex justify-center w-full px-8 pt-3'>
+            <label htmlFor='password' className='bg-[#3274d6] flex justify-center py-3 px-3'>
+              <FontAwesomeIcon icon={faLock} className="text-white"/>
+            </label>
+            <input type="password" name="password" placeholder="Password" id="password" className='border border-[#dee0e4] px-3 text-sm w-full' required />
+          </div>
+          <input type="submit" value="Login" className='w-full bg-[#3274d6] hover:bg-[#2868c7] text-white font-medium py-2 mt-16 cursor-pointer transition duration-200'/>
+        </form>
+      </div>
     </div>
   );
 }
