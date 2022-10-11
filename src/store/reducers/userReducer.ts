@@ -1,6 +1,6 @@
-import { UserDTO } from '../dtos/userDTO'
-import { ActionTemplate, UserState } from '../type'
-import * as actionTypes from './actionTypes'
+import { UserDTO } from '../../dtos/userDTO'
+import { ActionTemplate, UserState } from '../../type'
+import * as actionTypes from '../actionTypes'
 
 const initialState: UserState = {
     user: {
