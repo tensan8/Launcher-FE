@@ -2,9 +2,19 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUser, faLock } from '@fortawesome/free-solid-svg-icons';
 import React from 'react';
 import './App.css';
+import { UserState } from './type';
+import { getUser } from './store/actionCreators';
+import { connect } from 'react-redux';
 
-const App = (): JSX.Element => {
-  return (
+const App = (props: any): JSX.Element => {
+
+  React.useEffect(() => {
+    console.log(props.getUser(9))
+    console.log(props.user)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [props.user])
+
+  return (  
     <div className='w-screen h-screen pt-36'>
       <div className='bg-white w-1/3 h-4/6 shadow-md mx-auto'>
         <h1 className='text-center font-bold text-[#5b6574] text-xl border-b-2 border-[#dee0e4] py-3'>Login</h1>
@@ -28,4 +38,6 @@ const App = (): JSX.Element => {
   );
 }
 
-export default App;
+const mapStateToProps = (state: UserState) => ({user: state.user})
+
+export default connect(mapStateToProps, {getUser})(App);
