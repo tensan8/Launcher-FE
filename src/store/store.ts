@@ -1,5 +1,5 @@
-import { configureStore } from '@reduxjs/toolkit';
-import combineReducer from './combineReducer';
+import { configureStore } from '@reduxjs/toolkit'
+import combineReducer from './combineReducer'
 
 const store: any = configureStore({ reducer: combineReducer })
 
