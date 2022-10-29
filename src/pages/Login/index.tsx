@@ -7,12 +7,12 @@ import { getUser } from '../../store/actions/userActions'
 
 const LoginPage = (props: any): JSX.Element => {
   React.useEffect(() => {
-    console.log(props.user.user[0])
+    // console.log(props.user.user[0])
   }, [props.user])
 
   const handleSubmit = React.useCallback((e: React.SyntheticEvent) => {
     e.preventDefault()
-    props.getUser(9)
+    props.getUser(1)
   }, [])
 
   return (
