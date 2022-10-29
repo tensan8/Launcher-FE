@@ -1,10 +1,10 @@
-import { UserDTO } from './dtos/userDTO';
+import { UserDTO } from './dtos/userDTO'
 
-type UserState = { user: UserDTO }
+interface UserState { user: UserDTO }
 
-type ActionTemplate<TData> = {
-    type: string
-    data: TData
+interface ActionTemplate<TData> {
+  type: string
+  data: TData
 }
 
 // type UserDispatch = (args: UserAction) => UserAction
