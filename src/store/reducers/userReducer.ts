@@ -24,6 +24,11 @@ const reducer = (state: UserState = initialState, action: ActionTemplate<UserDTO
         ...state,
         user: action.data
       }
+    case actionTypes.LOGIN_USER:
+      return {
+        ...state,
+        user: action.data
+      }
     default:
       return {
         ...state

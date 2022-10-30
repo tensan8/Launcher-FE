@@ -2,29 +2,35 @@ import * as React from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock, faUser } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
-import { UserState } from '../../type'
-import { getUser } from '../../store/actions/userActions'
+import { LoginProps, UserState } from '../../type'
+import { loginUser } from '../../store/actions/userActions'
 import { useNavigate } from 'react-router-dom'
 import { UserDTO } from '../../dtos/userDTO'
 
 interface loginProps {
   sessionSetter: (sessionId: number) => {}
   user?: { user: UserDTO }
-  getUser?: (userInfo: any) => {}
+  loginUser?: (userInfo: LoginProps) => {}
 }
 
 const LoginPage = (props: loginProps): JSX.Element => {
   const navigate = useNavigate()
+  const usernameRef = React.useRef<HTMLInputElement>(null)
+  const passwordRef = React.useRef<HTMLInputElement>(null)
+  const [isUserValid, setIsUserValid] = React.useState(true)
 
   React.useEffect(() => {
-    if (props.user?.user.userId !== 0 && props.user !== undefined) {
+    if (props.user?.user.userId !== undefined && props.user?.user.userId !== 0) {
+      setIsUserValid(true)
       props.sessionSetter(props.user.user.userId)
+    } else if (Object.keys(props.user?.user ?? '').length === 0) {
+      setIsUserValid(false)
     }
   }, [props.user])
 
   const handleSubmit = React.useCallback((e: React.SyntheticEvent) => {
-    if (props.getUser !== undefined) {
-      props.getUser(1)
+    if (props.loginUser !== undefined) {
+      props.loginUser({ username: usernameRef.current?.value ?? '', password: passwordRef.current?.value ?? '' })
     }
     navigate('/')
     e.preventDefault()
@@ -39,13 +45,16 @@ const LoginPage = (props: loginProps): JSX.Element => {
                     <label htmlFor="username" className='bg-[#3274d6] flex justify-center py-3 px-3'>
                         <FontAwesomeIcon icon={faUser} className="text-white"/>
                     </label>
-                    <input type="text" name="username" placeholder="Username" id="username" className='border border-[#dee0e4] px-3 text-sm w-full' required />
+                    <input type="text" name="username" placeholder="Username" id="username" ref={usernameRef} className='border border-[#dee0e4] px-3 text-sm w-full' required />
                 </div>
                 <div className='flex justify-center w-full px-8 pt-3'>
                     <label htmlFor='password' className='bg-[#3274d6] flex justify-center py-3 px-3'>
                         <FontAwesomeIcon icon={faLock} className="text-white"/>
                     </label>
-                    <input type="password" name="password" placeholder="Password" id="password" className='border border-[#dee0e4] px-3 text-sm w-full' required />
+                    <input type="password" name="password" placeholder="Password" id="password" ref={passwordRef} className='border border-[#dee0e4] px-3 text-sm w-full' required />
+                </div>
+                <div className='flex justify-center w-full px-8 pt-3 h-4'>
+                    <p className='text-sm font-bold text-red-600'>{isUserValid ? '' : 'User not found'}</p>
                 </div>
                 <input type="submit" value="Login" onClick={handleSubmit} className='w-full bg-[#3274d6] hover:bg-[#2868c7] text-white font-medium py-2 mt-16 cursor-pointer transition duration-200'/>
             </form>
@@ -56,4 +65,4 @@ const LoginPage = (props: loginProps): JSX.Element => {
 
 const mapStateToProps = (userState: UserState): any => ({ user: userState.user })
 
-export default connect(mapStateToProps, { getUser })(LoginPage)
+export default connect(mapStateToProps, { loginUser })(LoginPage)
