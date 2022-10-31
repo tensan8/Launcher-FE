@@ -16,14 +16,14 @@ const Dashboard = (): JSX.Element => {
 					<a href="/">
 						<div className="catbox">
 							<img src={drinks} alt="drinks" />
-							<span>Sales Module</span>
+							<span>Drinks</span>
 						</div>
 					</a>
 							
 					<a href="/Table">
 						<div className="catbox">
 							<img src={table} alt="table"/>
-							<span>Inventory</span>
+							<span>Tables</span>
 						</div>
 					</a>
 			</div>
