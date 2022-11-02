@@ -11,11 +11,6 @@ const Table = (): JSX.Element => {
       </li>
 
       <li>
-        <div className="selected"></div>
-        <small>Selected</small>
-      </li>
-
-      <li>
         <div className="booked"></div>
         <small>Booked</small>
       </li>

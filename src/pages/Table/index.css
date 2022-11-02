@@ -5,7 +5,7 @@
     color: white;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    height: 90vh;
 }
 
   
@@ -16,15 +16,8 @@
     margin: 3px;
 }
   
-.selected {
-    background-color: #6feaf6;
-    height: 20px;
-    width: 22px;
-    margin: 3px;
-}
-
 .booked{
-    background-color: #ffea00;
+    background-color: #6feaf6;
     height: 20px;
     width: 22px;
     margin: 3px;
@@ -39,25 +32,19 @@
 
 .tablestatus{
     background-color: rgb(255, 255, 255);
-    height: 100px;
-    width: 50px;
-    margin: 3px;
+    padding:40px;
     margin-left: auto;
     margin-right: auto;
-    margin-top: 50px;
+    margin-top: 10px;
     color: black;
     text-align:center;
 }
   
-.tablestatus:not(.occupied):hover {
+.tablestatus:hover {
     cursor: pointer;
     transform: scale(1.2);
 }
-  
-.showcase .tablestatus:not(.occupied):hover {
-    cursor: default;
-    transform: scale(1);
-}
+
   
 .showcase {
     background-color: rgba(0, 0, 0, 0.1);
@@ -67,6 +54,7 @@
     list-style-type: none;
     display: flex;
     justify-content: space-between;
+    margin-bottom: 70px;
 }
   
 .showcase li {

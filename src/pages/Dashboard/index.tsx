@@ -16,7 +16,7 @@ const Dashboard = (): JSX.Element => {
 					<a href="/">
 						<div className="catbox">
 							<img src={drinks} alt="drinks" />
-							<span>Drinks</span>
+							<span>Snacks</span>
 						</div>
 					</a>
 							
