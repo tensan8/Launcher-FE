@@ -5,6 +5,8 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import Dashboard from './pages/Dashboard'
 import Table from './pages/Table'
+import Booking from './pages/Booking'
+import Snack from './pages/Snacks'
 import SessionChecker from './utils/sessionChecker'
 
 const App = (): any => {
@@ -28,6 +30,8 @@ const App = (): any => {
         <Route path="/" element={<Dashboard />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/table" element={<Table />} />
+        <Route path="/booking" element={<Booking/>} />
+        <Route path="/snack" element={<Snack/>} />
         <Route path = '*' element={<Navigate to='/' replace />} />
       </Routes>
     </BrowserRouter>

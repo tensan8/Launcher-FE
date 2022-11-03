@@ -13,7 +13,7 @@ const Dashboard = (): JSX.Element => {
                 <img src={logo} alt="logo" className='nekonya'></img>
             </div>
 			<div className="dashboard_container">	
-					<a href="/">
+					<a href="/Snack">
 						<div className="catbox">
 							<img src={drinks} alt="drinks" />
 							<span>Snacks</span>
