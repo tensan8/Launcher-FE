@@ -6,7 +6,7 @@ const Booking = (): JSX.Element => {
         <div className="flex ">
             <h1>Neko Neko Nya</h1>
             <img src={logo} alt="logo" className='nekonya'></img>
-            <form className="">
+            <form className="p-10 rounded-lg shadow-lg bg-white w-3/6 mx-auto my-auto">
                 <label>TableNo: </label>
                 <p>1</p>
 
