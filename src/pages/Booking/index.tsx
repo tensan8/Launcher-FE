@@ -28,7 +28,7 @@ const Booking = (): JSX.Element => {
                 <input type="radio" id="nonmember" value="Nonmember"/>
                 <label>No</label><br/>
 
-                <input type="submit" value="Submit"/>
+                <input type="submit" value="Booking"/>
             </form>
         </div>
     )
