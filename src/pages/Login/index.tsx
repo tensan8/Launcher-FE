@@ -37,10 +37,10 @@ const LoginPage = (props: loginProps): JSX.Element => {
   }, [])
 
   return (
-    <div className='w-screen h-screen pt-44'>
-        <div className='bg-white w-1/3 h-1/2 shadow-md mx-auto'>
+    <div className='w-screen flex items-center justify-center h-screen'>
+        <div className='bg-white w-1/3 shadow-md mx-auto my-auto'>
             <h1 className='text-center font-bold text-[#5b6574] text-xl border-b-2 border-[#dee0e4] py-3'>Login</h1>
-            <form className='flex flex-col justify-center py-14'>
+            <form className='flex flex-col justify-center pt-14'>
                 <div className='flex justify-center w-full px-8'>
                     <label htmlFor="username" className='bg-[#3274d6] flex justify-center py-3 px-3'>
                         <FontAwesomeIcon icon={faUser} className="text-white"/>
