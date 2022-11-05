@@ -26,38 +26,36 @@ const Booking = (props: any): JSX.Element => {
                 <img src={logo} alt="logo" className='w-16'/>
             </div>
             
-            <form className="flex flex-col justify-center py-14" onSubmit={handleSubmit}>
-                <div className='flex'>
+            <form className=" p-10 rounded-lg shadow-lg bg-cyan-700 w-4/6" onSubmit={handleSubmit}>
+                <div className='flex text-xl'>
                     <label className='font-bold'>TableNo:</label>
                     <p className='ml-2'>1</p>
                 </div>
-                <div className='flex text-xl'>
-                    <label htmlFor="booking_name" className='font-bold'>Your Name:</label>
-                    <input type="text" id="booking_name" size={50} value={NameValue} onChange={e=>setNameValue(e.target.value)} className='ml-2 outline outline-offset-2 outline-blue-500 bg-transparent'/>    
+                <div className='flex text-xl my-2'>
+                    <label htmlFor="booking_name" className='font-bold'>Name:</label>
+                    <input type="text" id="booking_name" value={NameValue} onChange={e=>setNameValue(e.target.value)} className='ml-2 rounded-lg px-2 text-sm w-full'/>    
                 </div>
-                <div className='flex'>
-                    <label htmlFor='booking_email'>Your Email:</label>
-                    <input type="text" id="booking_email"/>
-                </div>
-                
-                <div className='flex'>
-                    <label htmlFor='booking_phone'>Enter your Phone Number:</label>
-                    <input type="text" id="booking_phone"/>
+                <div className='flex text-xl my-2'>
+                    <label htmlFor='booking_email' className='font-bold'>Email:</label>
+                    <input type="text" id="booking_email" className='ml-2 rounded-lg px-2 text-sm w-full'/>
                 </div>
                 
-                <div className='flex'>
-                    <label htmlFor='booking_time'>Select Time (Opening Hour 13:00 - 23:00): </label>
-                    <input type="time" id="booking_time"/>
+                <div className='flex text-xl my-2'>
+                    <label htmlFor='booking_phone' className='font-bold'>Phone.No:</label>
+                    <input type="text" id="booking_phone" className='ml-2 rounded-lg px-2 text-sm w-full'/>
                 </div>
-                <div className='flex'>
-                    <p>Are you a member?</p>
-                    <input type="radio" id="member" value="Member"/>
-                    <label htmlFor='member'>Yes</label>
-                    <input type="radio" id="nonmember" value="Nonmember"/>
-                    <label htmlFor='nonmember'>No</label>
+                
+                <div className='flex text-xl my-2'>
+                    <label htmlFor='booking_time' className='font-bold'>Select Time (Opening Hour 13:00 - 23:00): </label>
+                    <input type="time" id="booking_time" className='ml-2 rounded-lg px-2 text-sm'/>
+                </div>
+                <div className='text-xl'>
+                    <p className='font-bold'>Are you a member?</p>
+                    <input type="radio" id="member" name="ismember" value="Member"/> Yes
+                    <input type="radio" id="nonmember" name="ismember" value="Nonmember"/>No
                 </div>
 
-                <input type="submit" value="Booking" className='w-full bg-[#3274d6] hover:bg-[#2868c7] text-white font-medium py-2 mt-16 cursor-pointer transition duration-200'/>
+                <input type="submit" value="Booking" className='w-full bg-[#3274d6] hover:bg-[#2868c7] text-white font-medium py-2 mt-8 cursor-pointer transition duration-200'/>
             </form>
         </div>
     )
