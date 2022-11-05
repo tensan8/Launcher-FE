@@ -9,7 +9,7 @@ const Dashboard = (): JSX.Element => {
     <div className="dashboard">
 		<div className="dashboard_box">
             <div className='mytable'>
-                <h1 className="para0"> Neko Neko Nya </h1>
+                <h1 className="para0"> Neko Neko Nyaa </h1>
                 <img src={logo} alt="logo" className='nekonya'></img>
             </div>
 			<div className="dashboard_container">	

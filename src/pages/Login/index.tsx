@@ -20,8 +20,7 @@ const LoginPage = (props: loginProps): JSX.Element => {
   const [isUserValid, setIsUserValid] = React.useState(true)
 
   React.useEffect(() => {
-    if (props.user?.user.userId !== undefined && props.user?.user.userId !== 0) {
-      setIsUserValid(true)
+    if (props.user?.user.userId == 0 && props.user !== undefined) {
       props.sessionSetter(props.user.user.userId)
     } else if (Object.keys(props.user?.user ?? '').length === 0) {
       setIsUserValid(false)
