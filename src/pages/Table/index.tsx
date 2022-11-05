@@ -1,8 +1,11 @@
 import * as React from 'react';
 import './index.css'
+import BackButton from '../BackButton/backbutton';
 
 const Table = (): JSX.Element => {
   return (
+    <div>
+      <BackButton backPath = "/"/>
     <div className='booking_seat'>
     <ul className="showcase">
       <li>
@@ -43,7 +46,7 @@ const Table = (): JSX.Element => {
 
     </div>
 
-    
+    </div>
   )
 }
 

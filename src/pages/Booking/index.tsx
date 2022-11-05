@@ -1,5 +1,6 @@
 import * as React from 'react';
 import logo from '../../images/nekonya.jpg'
+import BackButton from '../BackButton/backbutton';
 
 const Booking = (props: any): JSX.Element => {
 
@@ -20,7 +21,10 @@ const Booking = (props: any): JSX.Element => {
 
 
     return (
+        <div>
+        <BackButton backPath = "/"/>
         <div className="grid place-items-center my-20">
+            
             <div className='flex my-6'>
                 <h1 className='font-bold text-5xl text-white'>Neko Neko Nyaa</h1>
                 <img src={logo} alt="logo" className='w-16'/>
@@ -57,6 +61,7 @@ const Booking = (props: any): JSX.Element => {
 
                 <input type="submit" value="Booking" className='w-full bg-[#3274d6] hover:bg-[#2868c7] text-white font-medium py-2 mt-8 cursor-pointer transition duration-200'/>
             </form>
+        </div>
         </div>
     )
 }
