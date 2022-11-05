@@ -7,4 +7,9 @@ interface ActionTemplate<TData> {
   data: TData
 }
 
+interface LoginProps {
+  username: string
+  password: string
+}
+
 // type UserDispatch = (args: UserAction) => UserAction
