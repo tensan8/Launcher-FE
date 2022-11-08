@@ -3,6 +3,9 @@ import './index.css'
 import BackButton from '../BackButton/backbutton';
 
 const Table = (): JSX.Element => {
+
+  
+
   return (
     <div>
       <BackButton backPath = "/"/>

@@ -6,7 +6,7 @@ function BackButton(props: { backPath: To; }) {
     let navigate = useNavigate();
 
     return(
-        <div className="my-auto">
+        <div className="my-3 mx-5">
             <img src={backArrow} alt="Back Arrow" className="h-7 cursor-pointer" onClick={(e) => {navigate(props.backPath)}}/>
         </div>
     )
