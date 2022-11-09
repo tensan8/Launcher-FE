@@ -1,3 +1,5 @@
 export const GET_USER = 'GET_USER'
 export const POST_USER = 'POST_USER'
 export const LOGIN_USER = 'LOGIN_USER'
+export const ALL_TABLE_STATUS = 'ALL_TABLE_STATUS'
+export const RESET_TABLE_LIST = 'RESET_TABLE_LIST'
