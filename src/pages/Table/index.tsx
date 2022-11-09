@@ -37,8 +37,8 @@ const Table = (): JSX.Element => {
     </div> */}
     
     <div className="grid grid-cols-4 gap-20">
-    <a href='/Booking'><div className="tablestatus">1</div></a>
-      <div className="tablestatus">2</div>
+      <a href='/Booking'><div className="tablestatus">1</div></a>
+      <a href='/admintable'><div className="tablestatus">2</div></a>
       <div className="tablestatus">3</div>
       <div className="tablestatus">4</div>
       <div className="tablestatus">5</div>
