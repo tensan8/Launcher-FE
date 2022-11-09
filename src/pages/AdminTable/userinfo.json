@@ -1,0 +1,43 @@
+[
+    {
+        "UserID": "123456",
+        "Table": "1",
+        "Date": "14/11/2022",
+        "StartTime": "01:00 PM",
+        "EndTime":"02:00 PM"
+    },
+    {
+        "UserID": null,
+        "Table": "2",
+        "Date": null,
+        "StartTime": null,
+        "EndTime":null
+    },
+    {
+        "UserID": null,
+        "Table": "3",
+        "Date": null,
+        "StartTime": null,
+        "EndTime":null
+    },
+    {
+        "UserID": "5564",
+        "Table": "4",
+        "Date": "13/11/2022",
+        "StartTime": "02:30 PM",
+        "EndTime":"03:00 PM"
+    },
+    {
+        "UserID": null,
+        "Table": "5",
+        "Date": null,
+        "StartTime": null,
+        "EndTime":null
+    },{
+        "UserID": null,
+        "Table": "6",
+        "Date": null,
+        "StartTime": null,
+        "EndTime":null
+    }
+  ]

@@ -35,6 +35,7 @@ const App = (): any => {
         <Route path="/booking" element={<Booking/>} />
         <Route path="/snack" element={<Snack/>} />
         <Route path='/stock' element={<AdminStock/>}/>
+        <Route path='/admintable' element={<AdminTable/>}/>
         <Route path = '*' element={<Navigate to='/' replace />} />
       </Routes>
     </BrowserRouter>
