@@ -1,11 +1,11 @@
 import * as React from 'react';
 
 // const getStock = ({contact, handleEditClick, handleDeleteClick }): JSX.Element => {
-const getStock = ({contact, handleEditClick, handleDeleteClick }): JSX.Element => {
+const getStock = (): JSX.Element => {
 
   return (
     <tr>
-      <td>{contact.Name}</td>
+      {/* <td>{contact.Name}</td>
       <td>{contact.Price}</td>
       <td>{contact.Stock}</td>
       <td>
@@ -18,7 +18,7 @@ const getStock = ({contact, handleEditClick, handleDeleteClick }): JSX.Element =
         <button type="button" onClick={() => handleDeleteClick(contact.id)}>
           Delete
         </button>
-      </td>
+      </td> */}
     </tr>
   );
 };

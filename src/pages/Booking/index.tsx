@@ -12,9 +12,11 @@ const Booking = (props: any): JSX.Element => {
     const [StartTimeValue, setStartTimeValue] = React.useState('');
     const [EndTimeValue, setEndTimeValue] = React.useState('');
 
+    
+
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        console.log(event.currentTarget.elements);
+        console.log();
     }
 
 
