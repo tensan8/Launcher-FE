@@ -17,7 +17,7 @@ const Snacks = (): JSX.Element => {
             </div>
             
 
-            <form className='p-10 rounded-lg shadow-lg bg-white w-3/6 mx-auto my-6'>
+            <form className='p-10 rounded-lg shadow-lg bg-white md:w-3/6 w-4/6 mx-auto my-6'>
                 <fieldset>
                     <legend className='font-bold text-center text-2xl mb-5'>Ordering the Snack Here</legend>
                     <div className='form-group'>
@@ -37,8 +37,8 @@ const Snacks = (): JSX.Element => {
                                 <p className='text-lg font-bold'>RM 2.00</p>
                             </div>
                             <div className='float-right '>
-                            <label htmlFor='cola' className='text-lg font-bold'>Quantity: </label>
-                                <input type="number" id="cola" name='cola' min='0' max='5' />
+                                <label htmlFor='cola' className='text-lg font-bold'>Quantity: </label>
+                                <input type="number" id="cola" name='cola' min='0' max='5' className="border-2 border-stone-700 p-1"/>
                             </div>
                         </div>
                         <div className='flow-root mb-5'>
@@ -49,7 +49,7 @@ const Snacks = (): JSX.Element => {
                             </div>
                             <div className='float-right'>
                                 <label htmlFor='mdew' className='text-lg font-bold'>Quantity: </label>
-                                <input type="number" id="mdew" name='mdew'min='0' max='5'/>
+                                <input type="number" id="mdew" name='mdew'min='0' max='5' className="border-2 border-stone-700 p-1"/>
                             </div>
                         </div>
                         <div className='flow-root mb-5'>
@@ -60,7 +60,7 @@ const Snacks = (): JSX.Element => {
                             </div>
                             <div className='float-right'>
                                 <label htmlFor='7up' className='text-lg font-bold'>Quantity: </label>
-                                <input type="number" id="7up" name='7up' min='0' max='5'/>                            
+                                <input type="number" id="7up" name='7up' min='0' max='5' className="border-2 border-stone-700 p-1"/>                            
                             </div>
                         </div>
                         <div className='flow-root mb-5'>
@@ -71,7 +71,7 @@ const Snacks = (): JSX.Element => {
                             </div>
                             <div className='float-right'>
                                 <label htmlFor='superring' className='text-lg font-bold'>Quantity: </label>
-                                <input type="number" id="superring" name='superring' min='0' max='5'/>
+                                <input type="number" id="superring" name='superring' min='0' max='5' className="border-2 border-stone-700 p-1"/>
                             </div>
                         </div>
                         <div className='flow-root mb-5'>
@@ -82,7 +82,7 @@ const Snacks = (): JSX.Element => {
                             </div>
                             <div className='float-right'>
                                 <label htmlFor='mpotato' className='text-lg font-bold'>Quantity: </label>
-                                <input type="number" id="mpotato" name='mpotato' min='0' max='5'/>
+                                <input type="number" id="mpotato" name='mpotato' min='0' max='5' className="border-2 border-stone-700 p-1"/>
                             </div>
                         </div>
                     </div>

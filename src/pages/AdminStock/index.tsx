@@ -103,7 +103,7 @@ const Stock = (): JSX.Element => {
             ))}
             </tbody>
             </table>
-            </div>
+        </div>
     );
 };
 
