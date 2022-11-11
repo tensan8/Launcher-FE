@@ -12,7 +12,7 @@ const initialState: UserState = {
   }
 }
 
-const reducer = (state: UserState = initialState, action: ActionTemplate<UserDTO>): UserState => {
+const userReducer = (state: UserState = initialState, action: ActionTemplate<UserDTO>): UserState => {
   switch (action.type) {
     case actionTypes.GET_USER:
       return {
@@ -24,6 +24,11 @@ const reducer = (state: UserState = initialState, action: ActionTemplate<UserDTO
         ...state,
         user: action.data
       }
+    case actionTypes.LOGIN_USER:
+      return {
+        ...state,
+        user: action.data
+      }
     default:
       return {
         ...state
@@ -31,4 +36,4 @@ const reducer = (state: UserState = initialState, action: ActionTemplate<UserDTO
   }
 }
 
-export default reducer
+export default userReducer

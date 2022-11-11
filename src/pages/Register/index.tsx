@@ -9,7 +9,7 @@ import { Dialog, DialogContent, DialogContentText } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 const RegistrationPage = (props: any): JSX.Element => {
-  const [uuid, setUuid] = React.useState('0000')
+  const [uuid, setUuid] = React.useState('')
   const usernameRef = React.useRef<HTMLInputElement>(null)
   const passwordRef = React.useRef<HTMLInputElement>(null)
   const uuidRef = React.useRef<HTMLInputElement>(null)

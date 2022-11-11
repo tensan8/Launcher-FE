@@ -1,0 +1,72 @@
+.booking_seat{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    color: white;
+    align-items: center;
+    justify-content: center;
+    height: 90vh;
+}
+
+  
+.Available {
+    background-color: #ffffff;
+    height: 20px;
+    width: 22px;
+    margin: 3px;
+}
+  
+.Booked{
+    background-color: #6feaf6;
+    height: 20px;
+    width: 22px;
+    margin: 3px;
+}
+  
+.Unavailable {
+    background-color: rgb(255, 0, 0);
+    height: 20px;
+    width: 22px;
+    margin: 3px;
+}
+
+.tablestatus{
+    padding:40px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 10px;
+    text-align:center;
+}
+  
+.tablestatus:hover {
+    cursor: pointer;
+    transform: scale(1.2);
+}
+
+  
+.showcase {
+    background-color: rgba(0, 0, 0, 0.1);
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #777;
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 70px;
+}
+  
+.showcase li {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+}
+  
+.showcase li small {
+    margin-left: 10px;
+}
+  
+.row {
+    display: flex;
+}
+  

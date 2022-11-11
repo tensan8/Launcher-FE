@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux'
-import reducer from './reducers/userReducer'
+import userReducer from './reducers/userReducer'
+import tableListReducer from './reducers/tableListReducer'
 
 export default combineReducers({
-  user: reducer
+  user: userReducer,
+  tableList: tableListReducer
 })
