@@ -5,6 +5,7 @@ import { TableListState, tableListStatus } from '../../type'
 import { connect } from 'react-redux'
 import { getAllTableStatus, resetTableList, updateTableStatus } from '../../store/actions/tableListAction'
 import { TableListDTO } from '../../dtos/tableListDTO'
+import { Client } from 'paho-mqtt'
 
 interface tableProps {
   tableList?: { tableList: TableListDTO[] }
@@ -14,6 +15,27 @@ interface tableProps {
 }
 
 const tableStatusList: string[] = ['Available', 'Booked', 'Unavailable']
+
+const clientId = `website-${Math.random() * 100}`
+
+const client = new Client(
+  '81c6a3b298404ce4bf472251fbd6c76a.s1.eu.hivemq.cloud',
+  +('8884'),
+  clientId
+)
+
+client.connect({
+  userName: 'dashboard',
+  password: 'Tabletracking1',
+  cleanSession: true,
+  useSSL: true,
+  onSuccess: () => {
+    console.log('Connected')
+  },
+  onFailure: () => {
+    console.log('Could not connect to MQTT Broker', 'is-error')
+  }
+})
 
 const Table = (props: tableProps): JSX.Element => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
@@ -31,8 +53,10 @@ const Table = (props: tableProps): JSX.Element => {
   }, [])
 
   const handleTableStatus = React.useCallback((newStatus: string) => {
+    const updatedTableData = { tableId: currentTableId, status: newStatus.toLowerCase() as tableListStatus }
+
     if (props.updateTableStatus !== undefined) {
-      props.updateTableStatus({ tableId: currentTableId, status: newStatus.toLowerCase() as tableListStatus })
+      props.updateTableStatus(updatedTableData)
     }
 
     setIsDialogOpen(false)
@@ -40,6 +64,8 @@ const Table = (props: tableProps): JSX.Element => {
     if (props.resetTableList !== undefined) {
       props.resetTableList()
     }
+
+    client.publish('table1/status', JSON.stringify(updatedTableData))
   }, [currentTableId])
 
   return (
