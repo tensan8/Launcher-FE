@@ -7,14 +7,16 @@ import Dashboard from './pages/Dashboard'
 import Table from './pages/Table'
 import Booking from './pages/Booking'
 import Snack from './pages/Snacks'
+import AdminStock from './pages/AdminStock'
+import AdminTable from './pages/AdminTable'
 import SessionChecker from './utils/sessionChecker'
 
 const App = (): any => {
   const { sessionId, setSessionId } = SessionChecker()
 
-  if (sessionId == null) {
+  if (sessionId !== null) {
     return (
-      <BrowserRouter>s
+      <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login sessionSetter = { setSessionId }/>} />
           <Route path="/register" element={<Register />} />
@@ -32,6 +34,8 @@ const App = (): any => {
         <Route path="/table" element={<Table />} />
         <Route path="/booking" element={<Booking/>} />
         <Route path="/snack" element={<Snack/>} />
+        <Route path='/stock' element={<AdminStock/>}/>
+        <Route path='/admintable' element={<AdminTable/>}/>
         <Route path = '*' element={<Navigate to='/' replace />} />
       </Routes>
     </BrowserRouter>
