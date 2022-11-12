@@ -1,23 +1,55 @@
 import * as React from 'react';
 import logo from '../../images/nekonya.jpg'
 import BackButton from '../BackButton/backbutton';
+import { connect } from 'react-redux'
+import { Dialog, DialogContent, DialogContentText } from '@mui/material'
+import {bookingTable} from '../../store/actions/tableAction'
+import { TableState } from '../../type';
+import { useNavigate } from 'react-router-dom'
 
 const Booking = (props: any): JSX.Element => {
 
     // const [BookingValue, setBookingValue] = React.useState('');
     // const [TableValue, setTableValue] = React.useState('');
-    const NameValue = React.useState(null);
-    const [TableID] = React.useState(null);
-    const [DateValue, setDateValue]= React.useState('');
-    const [StartTimeValue, setStartTimeValue] = React.useState('');
-    const [EndTimeValue, setEndTimeValue] = React.useState('');
+    // const NameValue = React.useState("");
+    // const TableID = React.useState("");
+    // const [DateValue, setDateValue]= React.useState('');
+    // const [StartTimeValue, setStartTimeValue] = React.useState('');
+    // const [EndTimeValue, setEndTimeValue] = React.useState('');
 
+    const NameValue = React.useState("");
+    const TableID = React.useState("");
+    const DateValue = React.useRef<HTMLInputElement>(null)
+    const StartTimeValue = React.useRef<HTMLInputElement>(null)
+    const EndTimeValue = React.useRef<HTMLInputElement>(null)
+    const [isDialogOpen, setDialogOpen] = React.useState(false)
+    const navigate = useNavigate()
+
+    const handleSubmit = React.useCallback((e: React.SyntheticEvent) =>{
+        const tabledata = {
+            NameValue: '1',
+            TableID: "1",
+            Date: DateValue.current?.value,
+            StartTime: StartTimeValue.current?.value,
+            EndTime: EndTimeValue.current?.value
+        }
+        //props.bookingTable(tabledata)
+        e.preventDefault()
+        console.log(tabledata);
+    },[])
+
+    React.useEffect(() => {
+        if (props.user.user === 201) {
+          setDialogOpen(true)
+        } else {
+          setDialogOpen(false)
+        }
+      }, [props.user.user])
     
-
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        console.log();
-    }
+      const handleDialogClose = React.useCallback(() => {
+        setDialogOpen(false)
+        navigate('/')
+      }, [])
 
 
     return (
@@ -30,7 +62,7 @@ const Booking = (props: any): JSX.Element => {
                 <img src={logo} alt="logo" className='w-16'/>
             </div>
             
-            <form className=" p-7 rounded-lg shadow-lg bg-cyan-700 w-[32rem]" onSubmit={handleSubmit}>
+            <form className=" p-7 rounded-lg shadow-lg bg-cyan-700 w-[32rem]">
                 <div className='mb-10 flow-root'>
                     <div className='flex text-xl font-bold float-left'>
                         <p>UserID: </p>
@@ -43,23 +75,50 @@ const Booking = (props: any): JSX.Element => {
                 </div>
                 <div className='flex my-2'>
                     <label className='my-auto w-52 text-xl font-bold'>Select a date: </label>
-                    <input type="date" id="booking_name" placeholder='Name' required className='rounded-lg px-3 py-2 text-lg w-full' value={DateValue} onChange={e=>setDateValue(e.target.value)}/>    
+                    <input 
+                    type="date" 
+                    id="booking_date"
+                    name = "booking_date" 
+                    placeholder='Name' 
+                    required 
+                    className='rounded-lg px-3 py-2 text-lg w-full' 
+                    ref={DateValue}/>    
                 </div>
                 <p className='font-bold text-2xl mt-10'>Time (Opening Hour 1:00PM - 11:00PM)</p>
                 <div className='my-2 mt-5'>
                         <div className='flex'>
-                            <label htmlFor='booking_time' className='font-bold text-xl w-52'>Start Time: </label>
-                            <input type="time" id="booking_time" required className='rounded-lg text-lg px-2 w-full' value={StartTimeValue} onChange={e=>setStartTimeValue(e.target.value)}/>
+                            <label htmlFor='booking_starttime' className='font-bold text-xl w-52'>Start Time: </label>
+                            <input 
+                            type="time" 
+                            id="booking_starttime" 
+                            required 
+                            className='rounded-lg text-lg px-2 w-full' 
+                            ref={StartTimeValue}/>
                         </div>
                         <div className='flex my-2'>
-                            <label htmlFor='booking_time' className='font-bold text-xl w-52'>Finish Time: </label>
-                            <input type="time" id="booking_time" required className='rounded-lg text-lg px-2 w-full' value={EndTimeValue} onChange={e=>setEndTimeValue(e.target.value)}/>
+                            <label htmlFor='booking_endtime' className='font-bold text-xl w-52'>Finish Time: </label>
+                            <input 
+                            type="time" 
+                            id="booking_endtime" 
+                            required 
+                            className='rounded-lg text-lg px-2 w-full' 
+                            ref={EndTimeValue}/>
                         </div>
                 </div>
-                <input type="submit" value="Booking" className='w-full bg-[#3274d6] hover:bg-[#2868c7] text-white font-medium py-2 mt-8 cursor-pointer transition duration-200'/>
+                <input type="submit" onClick={handleSubmit} className='w-full bg-[#3274d6] hover:bg-[#2868c7] text-white font-medium py-2 mt-8 cursor-pointer transition duration-200'/>
             </form>
+            <Dialog open={isDialogOpen} onClose={ handleDialogClose } >
+                <DialogContent>
+                    <DialogContentText>
+                        Booking Success!
+                    </DialogContentText>
+                </DialogContent>
+            </Dialog>
         </div>
         </div>
     )
 }
-export default Booking
+
+const mapStateToProps = (userState:TableState):any =>({user: userState.user})
+
+export default connect(mapStateToProps, {bookingTable})(Booking)
