@@ -33,7 +33,7 @@ const App = (): any => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/table" element={<Table />} />
         <Route path="/booking" element={<Booking/>} />
-        <Route path="/snack" element={<Snack/>} />
+        <Route path="/snack" element={<Snack {...sessionId}/>} />
         <Route path='/stock' element={<AdminStock/>}/>
         <Route path='/admintable' element={<AdminTable/>}/>
         <Route path = '*' element={<Navigate to='/' replace />} />

@@ -10,6 +10,8 @@ interface TableListState { tableList?: TableListDTO[] }
 
 interface SnackState { snackList?: SnackDTO[] }
 
+interface SnackOrderState { snackOrder?: SnackOrderResponse[] }
+
 interface ActionTemplate<TData> {
   type: string
   data: TData
@@ -18,4 +20,12 @@ interface ActionTemplate<TData> {
 interface LoginProps {
   username: string
   password: string
+}
+
+interface SnackOrderResponse {
+  itemId?: SnackDTO
+  ownerId?: UserDTO
+  quantity?: number
+  totalAmount?: number
+  snackOrderId?: number
 }

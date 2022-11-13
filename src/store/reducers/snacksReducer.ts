@@ -4,8 +4,7 @@ import { SnackDTO } from "../../dtos/snackDTO";
 
 const initialState: SnackState = {snackList: []}
 
-const tableListReducer = (state: SnackState = initialState, action: ActionTemplate<SnackDTO[]>): SnackState => {
-    console.log(action.data)
+const snacksReducer = (state: SnackState = initialState, action: ActionTemplate<SnackDTO[]>): SnackState => {
     switch (action.type) {
         case actionTypes.ALL_SNACKS:
             return {
@@ -19,4 +18,4 @@ const tableListReducer = (state: SnackState = initialState, action: ActionTempla
     }
 }
 
-export default tableListReducer
+export default snacksReducer
