@@ -1,24 +1,35 @@
-import DiscordWebhook from 'discord-webhook-ts';
+import * as React from 'react'
+import axios from 'axios'
 
-// Pass in your Discord webhook URL.
-const discordClient = new DiscordWebhook('https://discord.com/api/webhooks/1041017207863382098/6b1QNGyQa_VH91U5KZH15j67pzEZf89WPET5llbHh0oIZJe2hgI5fyU_kreVcWuYDORt');
-
-discordClient.execute({
-    embeds: [
-        {
-            title: 'Some title',
-            description: 'Some description',
-        },
-        {
-            fields: [
+function Webhook(){
+    
+    const Send = async(data: any) =>{
+        const body = {
+            content: "Message Received",
+            tts: false,
+            color: 'white',
+            embeds:[
                 {
-                    name: 'Some field',
-                    value: 'Some field value',
-                }
-            ]
-        }
-    ]
-}).then((response) => {
-    console.log('Successfully sent webhook.')
-})
+                    title: 'Booking Form',
+                    description: data
+                },
+            ],
+        };
 
+        try{
+            const data = await axios.post(
+                "https://discord.com/api/webhooks/1041017207863382098/6b1QNGyQa_VH91U5KZH15j67pzEZf89WPET5llbHh0oIZJe2hgI5fyU_kreVcWuYDORt",
+                body
+            );
+            console.log(data);
+        }catch (error){
+            console.error(error);
+        }
+    };
+
+    return{
+        Send,
+    }
+}
+
+export default Webhook;
