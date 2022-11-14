@@ -81,7 +81,7 @@ const Booking = (props: any): JSX.Element => {
 
     const PostToDiscord = ()=>{
         const booking_detail = Object.entries(formData.data)
-        .map((d) => `${d[0]} : ${d[1]}`)
+        .map((d) => `${d[0]}: ${d[1]}`)
         .join("\n");
         Send(booking_detail);
     };
