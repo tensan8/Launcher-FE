@@ -12,12 +12,60 @@ import { useState } from 'react';
 
 const Snacks = (): JSX.Element => {
 
-    const [TableID, setTableID] = React.useState('');
+    const UserName = React.useState("");
+    const TableID = React.useRef<HTMLSelectElement>(null);
+    const ItemValue = React.useRef<HTMLInputElement>(null);
+    const ItemQuantity = React.useRef<HTMLInputElement>(null);
+
+    const selectTable = (e:React.ChangeEvent<HTMLSelectElement>) =>{
+        const TableID = e.target.value;
+        console.log(TableID);
+    }
+
+    const handleSubmit = React.useCallback((e: React.SyntheticEvent) =>{
+        const orderdata = {
+            UserName: '123',
+            TableID: TableID.current?.value,
+            ItemValue: ItemValue.current?.value,
+            ItemQuantity: ItemQuantity.current?.value
+        }
+        //props.bookingTable(tabledata)
+        e.preventDefault()
+        PostToDiscord();
+        console.log(orderdata);
+    },[])
+
+    const [formData, setFormData] = useState({
+        data:{
+            UserID: '123',
+            TableNo: '',
+            Order: '',
+            Quantity: ''
+        },
+        error: {},
+    });
+
+    const setDynamicFormData = (name: string, value: string) =>{
+        setFormData({
+            data: {
+                ...formData.data,
+                [name]: value,
+            },
+            error: {},
+        });
+    };
+
+    const {Send}=SnackOrder();
+
+    const PostToDiscord = ()=>{
+        const orderingsnack = Object.entries(formData.data)
+        .map((d) => `${d[0]}: ${d[1]}`)
+        .join("\n");
+        Send(orderingsnack);
+    };
 
 
-
-
-  return (
+    return (
         <div>
             <BackButton backPath = "/"/>
             <div className='my-6 mx-auto'>
@@ -30,7 +78,7 @@ const Snacks = (): JSX.Element => {
                     <legend className='font-bold text-center text-2xl mb-5'>Ordering the Snack Here</legend>
                     <div className='form-group'>
                         <label className='font-bold text-lg'>Table:</label>
-                        <select id="country" name="country">
+                        <select id="country" name="country" onChange={selectTable} >
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>

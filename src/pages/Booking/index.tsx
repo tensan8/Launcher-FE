@@ -19,7 +19,7 @@ const Booking = (props: any): JSX.Element => {
     // const [StartTimeValue, setStartTimeValue] = React.useState('');
     // const [EndTimeValue, setEndTimeValue] = React.useState('');
 
-    const NameValue = React.useState("");
+    const UserName = React.useState("");
     const TableID = React.useState("");
     const DateValue = React.useRef<HTMLInputElement>(null)
     const StartTimeValue = React.useRef<HTMLInputElement>(null)
@@ -30,7 +30,7 @@ const Booking = (props: any): JSX.Element => {
 
     const handleSubmit = React.useCallback((e: React.SyntheticEvent) =>{
         const tabledata = {
-            NameValue: '1',
+            UserName: '1',
             TableID: "1",
             Date: DateValue.current?.value,
             StartTime: StartTimeValue.current?.value,
@@ -38,7 +38,7 @@ const Booking = (props: any): JSX.Element => {
         }
         //props.bookingTable(tabledata)
         e.preventDefault()
-        // PostToDiscord();
+        PostToDiscord();
         console.log(tabledata);
     },[])
 
@@ -98,10 +98,7 @@ const Booking = (props: any): JSX.Element => {
             
             <form 
             className=" p-7 rounded-lg shadow-lg bg-cyan-700 w-[32rem]"
-            onSubmit={(e)=>{
-                e.preventDefault();
-                PostToDiscord();
-            }}
+            onSubmit={handleSubmit}
             >
                 <div className='mb-10 flow-root'>
                     <div className='flex text-xl font-bold float-left'>
