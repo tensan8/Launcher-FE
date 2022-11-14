@@ -6,8 +6,17 @@ import Sup from '../../images/7up.png'
 import superring from '../../images/superring.png'
 import mspotato from '../../images/mp.png'
 import BackButton from '../BackButton/backbutton'
+import SnackOrder from '../Webhook/snackorder'
+import { useState } from 'react';
+
 
 const Snacks = (): JSX.Element => {
+
+    const [TableID, setTableID] = React.useState('');
+
+
+
+
   return (
         <div>
             <BackButton backPath = "/"/>

@@ -7,7 +7,7 @@ import {bookingTable} from '../../store/actions/tableAction'
 import { TableState } from '../../type';
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react';
-import Webhook from '../Webhook/webhook'
+import TableBooking from '../Webhook/tablebooking'
 
 const Booking = (props: any): JSX.Element => {
 
@@ -77,7 +77,7 @@ const Booking = (props: any): JSX.Element => {
         });
     };
 
-    const {Send}=Webhook();
+    const {Send}=TableBooking();
 
     const PostToDiscord = ()=>{
         const booking_detail = Object.entries(formData.data)

@@ -1,7 +1,7 @@
 import * as React from 'react'
 import axios from 'axios'
 
-function Webhook(){
+function BookingTableForm(){
     
     const Send = async(data: any) =>{
         const body = {
@@ -32,4 +32,4 @@ function Webhook(){
     }
 }
 
-export default Webhook;
+export default BookingTableForm;
