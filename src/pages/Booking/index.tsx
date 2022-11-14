@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from 'react'
 import logo from '../../images/nekonya.jpg'
 import BackButton from '../BackButton/backbutton';
 import { connect } from 'react-redux'
@@ -90,7 +90,7 @@ const Booking = (props: any): JSX.Element => {
         <div>
         <BackButton backPath = "/"/>
         <div className="grid place-items-center my-16">
-            
+
             <div className='flex my-3'>
                 <h1 className='font-bold text-5xl text-white my-auto'>Neko Neko Nyaa</h1>
                 <img src={logo} alt="logo" className='w-16'/>
@@ -173,7 +173,7 @@ const Booking = (props: any): JSX.Element => {
             </Dialog>
         </div>
         </div>
-    )
+  )
 }
 
 const mapStateToProps = (userState:TableState):any =>({user: userState.user})

@@ -14,9 +14,9 @@ import SessionChecker from './utils/sessionChecker'
 const App = (): any => {
   const { sessionId, setSessionId } = SessionChecker()
 
-  if (sessionId !== null) {
+  if (sessionId == null) {
     return (
-      <BrowserRouter>
+      <BrowserRouter>s
         <Routes>
           <Route path="/" element={<Login sessionSetter = { setSessionId }/>} />
           <Route path="/register" element={<Register />} />

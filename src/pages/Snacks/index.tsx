@@ -1,21 +1,20 @@
-import * as React from 'react';
+import * as React from 'react'
 import logo from '../../images/nekonya.jpg'
 import cola from '../../images/cola.png'
 import mdew from '../../images/mdew.png'
 import Sup from '../../images/7up.png'
 import superring from '../../images/superring.png'
 import mspotato from '../../images/mp.png'
-import BackButton from '../BackButton/backbutton';
+import BackButton from '../BackButton/backbutton'
 
 const Snacks = (): JSX.Element => {
-    return(
+  return (
         <div>
             <BackButton backPath = "/"/>
             <div className='my-6 mx-auto'>
                     <h1 className='text-center font-bold text-5xl text-white my-2'>Neko Neko Nyaa</h1>
                     <img src={logo} alt="logo" className='mx-auto'/>
             </div>
-            
 
             <form className='p-10 rounded-lg shadow-lg bg-white md:w-3/6 w-4/6 mx-auto my-6'>
                 <fieldset>
@@ -90,6 +89,6 @@ const Snacks = (): JSX.Element => {
                 </fieldset>
             </form>
         </div>
-    )
+  )
 }
 export default Snacks

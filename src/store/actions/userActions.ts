@@ -6,7 +6,7 @@ import { LoginProps } from '../../type'
 export const getUser = (id: number): any => {
   return async (dispatch: Dispatch) => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_SINGLE_USER ?? ''}/${id}` ?? '')
+      const response = await axios.get(`${process.env.REACT_APP_HOST ?? ''}/user/${id}` ?? '')
 
       dispatch({
         type: actionTypes.GET_USER,
@@ -21,7 +21,7 @@ export const getUser = (id: number): any => {
 export const loginUser = (userInfo: LoginProps): any => {
   return async (dispatch: Dispatch) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_SINGLE_USER ?? ''}/login` ?? '', userInfo)
+      const response = await axios.post(`${process.env.REACT_APP_HOST ?? ''}/user/login` ?? '', userInfo)
 
       dispatch({
         type: actionTypes.LOGIN_USER,
@@ -36,7 +36,7 @@ export const loginUser = (userInfo: LoginProps): any => {
 export const registerUser = (userData: any): any => {
   return async (dispatch: Dispatch) => {
     try {
-      const response = await axios.post(`${process.env.REACT_APP_SINGLE_USER ?? ''}` ?? '', userData)
+      const response = await axios.post(`${process.env.REACT_APP_HOST ?? ''}/user` ?? '', userData)
 
       dispatch({
         type: actionTypes.POST_USER,
