@@ -16,7 +16,7 @@ const App = (): any => {
 
   if (sessionId == null) {
     return (
-      <BrowserRouter>
+      <BrowserRouter>s
         <Routes>
           <Route path="/" element={<Login sessionSetter = { setSessionId }/>} />
           <Route path="/register" element={<Register />} />
