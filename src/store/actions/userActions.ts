@@ -18,6 +18,14 @@ export const getUser = (id: number): any => {
   }
 }
 
+export const resetUser = (): any => {
+  return (dispatch: Dispatch) => {
+    dispatch({
+      type: actionTypes.RESET_USER
+    })
+  }
+}
+
 export const loginUser = (userInfo: LoginProps): any => {
   return async (dispatch: Dispatch) => {
     try {

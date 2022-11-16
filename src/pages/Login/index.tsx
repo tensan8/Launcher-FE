@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLock, faUser } from '@fortawesome/free-solid-svg-icons'
 import { connect } from 'react-redux'
 import { LoginProps, UserState } from '../../type'
-import { loginUser } from '../../store/actions/userActions'
+import {loginUser, resetUser} from '../../store/actions/userActions'
 import { useNavigate } from 'react-router-dom'
 import { UserDTO } from '../../dtos/userDTO'
 
@@ -11,6 +11,7 @@ interface loginProps {
   sessionSetter: (sessionId: number) => {}
   user?: { user: UserDTO }
   loginUser?: (userInfo: LoginProps) => {}
+  resetUser?: () => {}
 }
 
 const LoginPage = (props: loginProps): JSX.Element => {
@@ -20,22 +21,30 @@ const LoginPage = (props: loginProps): JSX.Element => {
   const [isUserValid, setIsUserValid] = React.useState(true)
 
   React.useEffect(() => {
-    if (props.user?.user.userId !== 0 && props.user !== undefined) {
-      props.sessionSetter(props.user.user.userId)
-    } else if (Object.keys(props.user?.user ?? '').length === 0) {
-      setIsUserValid(false)
-    }
+      if(props.user?.user !== null) {
+          if (props.user?.user.userId !== 0 && props.user !== undefined) {
+              props.sessionSetter(props.user.user.userId)
+          } else if (Object.keys(props.user?.user ?? '').length === 0) {
+              setIsUserValid(false)
+          }
+      }
   }, //eslint-disable-next-line
-      [props.user])
+      [props.user?.user])
 
   const handleSubmit = React.useCallback((e: React.SyntheticEvent) => {
     if (props.loginUser !== undefined) {
       props.loginUser({ username: usernameRef.current?.value ?? '', password: passwordRef.current?.value ?? '' })
     }
+
+    if (props.resetUser !== undefined) {
+        props.resetUser()
+    }
+
     navigate('/')
+
     e.preventDefault()
   }, //eslint-disable-next-line
-      [])
+      [props])
 
   return (
     <div className='w-screen flex items-center justify-center h-screen'>
@@ -66,4 +75,4 @@ const LoginPage = (props: loginProps): JSX.Element => {
 
 const mapStateToProps = (userState: UserState): any => ({ user: userState.user })
 
-export default connect(mapStateToProps, { loginUser })(LoginPage)
+export default connect(mapStateToProps, { loginUser, resetUser })(LoginPage)

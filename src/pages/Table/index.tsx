@@ -1,17 +1,24 @@
 import * as React from 'react'
 import './index.css'
 import { Dialog, DialogTitle, List, ListItemButton, ListItemText } from '@mui/material'
-import { TableListState, tableListStatus } from '../../type'
+import {SnackOrderState, SnackState, TableListState, tableListStatus, UserState} from '../../type'
 import { connect } from 'react-redux'
 import { getAllTableStatus, resetTableList, updateTableStatus } from '../../store/actions/tableListAction'
 import { TableListDTO } from '../../dtos/tableListDTO'
 import { Client } from 'paho-mqtt'
+import {getUser} from "../../store/actions/userActions";
+import {UserDTO} from "../../dtos/userDTO";
+import {useNavigate} from "react-router-dom";
+import BackButton from "../BackButton/backbutton";
 
 interface tableProps {
+  userId: number
   tableList?: { tableList: TableListDTO[] }
   getAllTableStatus?: () => {}
   resetTableList?: () => {}
   updateTableStatus?: (table: TableListDTO) => {}
+  getUser?: (id: number) => {}
+  user?: { user: UserDTO }
 }
 
 const tableStatusList: string[] = ['Available', 'Booked', 'Unavailable']
@@ -40,17 +47,31 @@ client.connect({
 const Table = (props: tableProps): JSX.Element => {
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
   const [currentTableId, setCurrentTableId] = React.useState(0)
+  const navigate = useNavigate()
+
+  React.useEffect(() => {
+    if(props.getUser !== undefined && props.userId !== undefined && props.user !== undefined) {
+      props.getUser(props.userId)
+    }
+  }, [])
 
   React.useEffect(() => {
     if (props.getAllTableStatus !== undefined && props.tableList?.tableList === undefined) {
       props.getAllTableStatus()
     }
-  }, [props.tableList])
+  }, [props, props.tableList])
 
   const handleTableClick = React.useCallback((tableId: number) => {
-    setCurrentTableId(tableId)
-    setIsDialogOpen(true)
-  }, [])
+    if(props.user?.user.role === 'admin') {
+      setCurrentTableId(tableId)
+      setIsDialogOpen(true)
+    } else {
+      navigate("/booking", {state: {
+        userId: props.user?.user.userId,
+        tableId: tableId
+      }});
+    }
+  }, [props.user?.user])
 
   const handleTableStatus = React.useCallback((newStatus: string) => {
     const updatedTableData = { tableId: currentTableId, status: newStatus.toLowerCase() as tableListStatus }
@@ -70,6 +91,7 @@ const Table = (props: tableProps): JSX.Element => {
 
   return (
     <div className='booking_seat'>
+        <BackButton backPath = {-1}/>
         <ul className="showcase">
           {tableStatusList.map((status: string, index: number) => {
             return (
@@ -117,6 +139,14 @@ const Table = (props: tableProps): JSX.Element => {
   )
 }
 
-const mapStateToProps = (tableListState: TableListState): any => ({ tableList: tableListState.tableList })
+const mapStateToProps = (tableState: TableListState | UserState): any => ({
+  tableList: "tableList" in tableState && tableState.tableList,
+  user: "user" in tableState && tableState.user
+})
 
-export default connect(mapStateToProps, { getAllTableStatus, resetTableList, updateTableStatus })(Table)
+export default connect(mapStateToProps, {
+  getAllTableStatus,
+  resetTableList,
+  updateTableStatus,
+  getUser
+})(Table)

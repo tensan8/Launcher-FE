@@ -3,8 +3,32 @@ import logo from '../../images/nekonya.jpg'
 import drinks from '../../images/drink.png'
 import table from '../../images/table.jpg'
 import './index.css'
+import {useNavigate} from "react-router-dom";
+import {connect} from "react-redux";
+import {getUser, resetUser} from "../../store/actions/userActions";
+import {getAllTableStatus, resetTableList, updateTableStatus} from "../../store/actions/tableListAction";
+import {TableListState, UserState} from "../../type";
 
-const Dashboard = (): JSX.Element => {
+interface DashboardProps {
+    sessionReset: any
+    resetUser?: () => {}
+}
+
+const Dashboard = (props: DashboardProps): JSX.Element => {
+    const navigate = useNavigate()
+
+    const handleLogout = React.useCallback((e: React.SyntheticEvent) => {
+        props.sessionReset()
+
+        if(props.resetUser !== undefined) {
+            props.resetUser()
+        }
+
+        navigate('/')
+
+        e.preventDefault()
+    }, [navigate, props])
+
   return (
         <div className="dashboard">
             <div className="dashboard_box">
@@ -13,23 +37,28 @@ const Dashboard = (): JSX.Element => {
                     <img src={logo} alt="logo" className='nekonya'></img>
                 </div>
                 <div className="dashboard_container">
-                    <a href="/Snack">
-                        <div className="catbox">
-                            <img src={drinks} alt="drinks" />
-                            <span>Snacks</span>
-                        </div>
-                    </a>
+                    <div className="catbox cursor-pointer" onClick={(e) => {
+                        e.preventDefault()
+                        navigate("/Snack")
+                    }}>
+                        <img src={drinks} alt="drinks" />
+                        <span>Snacks</span>
+                    </div>
 
-                    <a href="/Table">
-                        <div className="catbox">
-                            <img src={table} alt="table"/>
-                            <span>Tables</span>
-                        </div>
-                    </a>
+                    <div className="catbox cursor-pointer" onClick={(e) => {
+                        e.preventDefault()
+                        navigate("/Table")
+                    }}>
+                        <img src={table} alt="table"/>
+                        <span>Tables</span>
+                    </div>
                 </div>
             </div>
+            <h1 className='font-bold text-red-600 cursor-pointer' onClick={handleLogout}>Logout</h1>
         </div>
   )
 }
 
-export default Dashboard
+const mapStateToProps = (userState: UserState): any => ({user: userState.user})
+
+export default connect(mapStateToProps, {resetUser})(Dashboard)
