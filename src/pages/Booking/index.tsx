@@ -4,12 +4,17 @@ import BackButton from '../BackButton/backbutton';
 import { connect } from 'react-redux'
 import { Dialog, DialogContent, DialogContentText } from '@mui/material'
 import {bookingTable} from '../../store/actions/tableAction'
-import { TableState } from '../../type';
 import {useLocation, useNavigate} from 'react-router-dom'
-import { useState } from 'react';
 import TableBooking from '../Webhook/tablebooking'
+import {BookingDTO} from "../../dtos/bookingDTO";
+import {BookingState} from "../../type";
 
-const Booking = (props: any): JSX.Element => {
+interface BookingProps {
+    booking?: BookingDTO
+    bookingTable?: (bookingData: BookingDTO) => {}
+}
+
+const Booking = (props: BookingProps): JSX.Element => {
     const DateValue = React.useRef<HTMLInputElement>(null)
     const StartTimeValue = React.useRef<HTMLInputElement>(null)
     const EndTimeValue = React.useRef<HTMLInputElement>(null)
@@ -19,48 +24,32 @@ const Booking = (props: any): JSX.Element => {
     const {userId, tableId} = state
 
     const handleSubmit = React.useCallback((e: React.SyntheticEvent) =>{
-        const tabledata = {
-            UserName: '1',
-            TableID: "1",
-            Date: DateValue.current?.value,
-            StartTime: StartTimeValue.current?.value,
-            EndTime: EndTimeValue.current?.value
+        const bookingData: BookingDTO = {
+            tableId: tableId,
+            userId: userId,
+            bookingDate: DateValue.current?.value!,
+            bookingStartTime: StartTimeValue.current?.value!,
+            bookingEndTime: EndTimeValue.current?.value!
+        }
+        if(props.bookingTable !== undefined) {
+            props.bookingTable(bookingData)
         }
         e.preventDefault()
-        PostToDiscord(tabledata);
-    },[])
-
-    React.useEffect(() => {
-        if (props.user.user === 201) {
-          setDialogOpen(true)
-        } else {
-          setDialogOpen(false)
-        }
-      }, [props.user.user])
+        PostToDiscord(bookingData);
+        setDialogOpen(true);
+    },[props, tableId, userId])
     
     const handleDialogClose = React.useCallback(() => {
         setDialogOpen(false)
         navigate('/')
-    }, [])
-
-    const [formData, setFormData] = useState({
-        data:{
-            UserID: userId,
-            TableNo: tableId,
-            booking_date: '',
-            booking_starttime: '',
-            booking_endtime: '',
-        },
-        error: {},
-    });
+    }, [navigate])
 
     const {Send}=TableBooking();
 
-    const PostToDiscord = (tableData: {[key: string]: any}) => {
-        const booking_detail = Object.entries(tableData)
+    const PostToDiscord = (bookingData: {[key: string]: any}) => {
+        const booking_detail = Object.entries(bookingData)
         .map((d) => `${d[0]}: ${d[1]}`)
         .join("\n");
-        console.log(booking_detail)
         // Send(booking_detail);
     };
 
@@ -135,6 +124,6 @@ const Booking = (props: any): JSX.Element => {
   )
 }
 
-const mapStateToProps = (userState:TableState):any =>({user: userState.user})
+const mapStateToProps = (bookingState: BookingState):any =>({booking: bookingState.booking})
 
 export default connect(mapStateToProps, {bookingTable})(Booking)
