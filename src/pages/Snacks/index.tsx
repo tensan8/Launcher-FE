@@ -21,6 +21,12 @@ interface SnacksProps {
     userId: number
 }
 
+type SnackInfo = {
+    name: string,
+    qty: number,
+    price: number
+}
+
 const Snacks = (props: SnacksProps): JSX.Element => {
     const [order, setOrder] = React.useState({})
     const [orderitemvalue, setOrderItemValue] = React.useState([])
@@ -28,6 +34,10 @@ const Snacks = (props: SnacksProps): JSX.Element => {
     const navigate = useNavigate()
     const [grandTotal, setGrandTotal] = React.useState(0)
     const TableID = React.useRef<HTMLSelectElement>(null)
+
+    const snackOrders = React.useMemo<SnackInfo[]>(() => {
+        return []
+    }, [])
 
     React.useEffect(() => {
         if(props.getAllSnacks !== undefined) {
@@ -49,18 +59,43 @@ const Snacks = (props: SnacksProps): JSX.Element => {
         }
 
         setGrandTotal(total)
-    }, [props.snackOrder])
+    }, [props.snackOrder, grandTotal])
 
-    const handleOnChange = React.useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    const handleOnChange = React.useCallback((e: React.FormEvent<HTMLInputElement>, priceProp: number) => {
         const snackId = e.currentTarget.id
         const snackQty = e.currentTarget.value
+        const snackName = e.currentTarget.name
 
         setOrder((prevState) => ({
             ...prevState,
             [snackId]: snackQty
         }))
-    }, //eslint-disable-next-line
-        [])
+
+        let isIncluded = false
+
+        if(snackOrders.length > 0) {
+            snackOrders.forEach((snack: SnackInfo, index: number) => {
+                if(snack.name === snackName) {
+                    if(snack.qty !== Number(snackQty)) {
+                        snackOrders[index] = {
+                            name: snack.name,
+                            qty: Number(snackQty),
+                            price: snack.price
+                        }
+                    }
+                    isIncluded = true
+                }
+            })
+        }
+
+        if(!isIncluded) {
+            snackOrders.push({
+                name: snackName,
+                qty: Number(snackQty),
+                price: priceProp
+            })
+        }
+    }, [])
 
 
     //######## Check the result that choosen by the user. (in array format) #####################
@@ -78,8 +113,10 @@ const Snacks = (props: SnacksProps): JSX.Element => {
 
     const handleDialogClose = React.useCallback(() => {
         setIsSummary(false)
-        //navigate('/')
-    }, [navigate])
+        console.log(grandTotal)
+        console.log(snackOrders)
+        navigate('/')
+    }, [navigate, snackOrders, grandTotal])
 
     const {Send} = getSnackOrder();
 
@@ -162,7 +199,7 @@ const Snacks = (props: SnacksProps): JSX.Element => {
                                             </div>
                                             <div className='h-full my-auto'>
                                                 <label htmlFor={snack.name} className='text-lg font-bold'>Quantity: </label>
-                                                <input type="number" onInput={handleOnInput} onChange={handleOnChange} id={snack.snackId.toString()} name={snack.name} placeholder="0" min='0' max='5' className="border-2 border-stone-700 p-1"/>
+                                                <input type="number"  onChange={(e) => handleOnChange(e, snack.price)} id={snack.snackId.toString()} name={snack.name} min='0' max='5' className="border-2 border-stone-700 p-1"/>
                                             </div>
                                         </div>
                                     )
