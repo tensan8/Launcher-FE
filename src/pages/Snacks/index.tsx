@@ -10,6 +10,8 @@ import {newSnackOrder} from "../../store/actions/snackOrderAction";
 import {SnackOrderDTO} from "../../dtos/snackOrderDTO";
 import {Dialog, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
 import {useNavigate} from "react-router-dom";
+import Item from 'antd/lib/list/Item';
+import getSnackOrder from '../Webhook/snackorder';
 
 interface SnacksProps {
     snackList?: {snackList: SnackDTO[]}
@@ -21,13 +23,12 @@ interface SnacksProps {
 
 const Snacks = (props: SnacksProps): JSX.Element => {
     const [order, setOrder] = React.useState({})
+    const [orderitemvalue, setOrderItemValue] = React.useState([])
     const [isSummary, setIsSummary] = React.useState(false)
     const navigate = useNavigate()
     const [grandTotal, setGrandTotal] = React.useState(0)
     const TableID = React.useRef<HTMLSelectElement>(null)
-    const ItemName = React.useRef<HTMLLabelElement>(null)
-    const ItemQuantity = React.useRef<HTMLInputElement>(null)
-    
+    const ItemValue = React.useRef<HTMLInputElement>(null)
 
     React.useEffect(() => {
         if(props.getAllSnacks !== undefined) {
@@ -35,29 +36,6 @@ const Snacks = (props: SnacksProps): JSX.Element => {
         }
     }, //eslint-disable-next-line
         [])
-
-    const handleSubmit = React.useCallback((e: React.SyntheticEvent) => {
-        e.preventDefault();
-
-        const orderitems ={
-            data:{
-                TableID: TableID,
-                ItemName: ItemName,
-                ItemQuantity:ItemQuantity.current?.value
-            },
-            error: {},
-        };
-
-        console.log(TableID)
-
-        PostToDiscord(orderitems);
-        const orderArr = SnackOrderMapper(order, props.userId)
-        if(props.newSnackOrder !== undefined) {
-            props.newSnackOrder(orderArr)
-        }
-        console.log()
-        setIsSummary(true)
-    }, [order, props])
 
     React.useEffect(() => {
         setGrandTotal(0)
@@ -76,6 +54,7 @@ const Snacks = (props: SnacksProps): JSX.Element => {
 
     const handleOnChange = React.useCallback((e: React.FormEvent<HTMLInputElement>) => {
         const snackId = e.currentTarget.id
+        const snackName = e.currentTarget.name
         const snackQty = e.currentTarget.value
 
         setOrder((prevState) => ({
@@ -85,17 +64,52 @@ const Snacks = (props: SnacksProps): JSX.Element => {
     }, //eslint-disable-next-line
         [])
 
+    const handleOnInput = React.useCallback((e: React.FormEvent<HTMLInputElement>) => {
+        const snackName = e.currentTarget.name
+        const snackQty = e.currentTarget.value
+
+        setOrderItemValue((getitemvalue)=>({
+            ...getitemvalue,
+            [snackName]: snackQty
+        }))
+    }, //eslint-disable-next-line
+        [])
+
     const handleDialogClose = React.useCallback(() => {
         setIsSummary(false)
-        navigate('/')
+        //navigate('/')
     }, [navigate])
 
-    const PostToDiscord = (orderitems: {[key: string]: any}) => {
-        const order_item = Object.entries(orderitems)
+    const {Send} = getSnackOrder();
+
+    const PostToDiscord = (orderdata: {[key:string]:any}) => {
+        const order_detail = Object.entries(orderdata)
         .map((d) => `${d[0]}: ${d[1]}`)
         .join("\n");
-        console.log(order_item)
+
+        // console.log(order_detail)
+        Send(order_detail)
     };
+
+    const handleSubmit = React.useCallback((e: React.SyntheticEvent) => {
+
+        const orderdata ={
+            Table: TableID.current?.value,
+            Order: orderitemvalue,
+            Quantity: orderitemvalue,
+            RM: grandTotal
+        }
+
+        console.log(orderdata)
+
+        e.preventDefault();
+        PostToDiscord(orderdata);
+        const orderArr = SnackOrderMapper(order, props.userId)
+        if(props.newSnackOrder !== undefined) {
+            props.newSnackOrder(orderArr)
+        }
+        setIsSummary(true)
+    }, [order, props])
     
 
     return(
@@ -119,7 +133,7 @@ const Snacks = (props: SnacksProps): JSX.Element => {
                     <div className='form-group'>
                         <label className='font-bold text-lg'>Table:</label>
 
-                        <select id="tableid" name="tableid" value={TableID.current?.value}>
+                        <select id="tableid" name="tableid" ref={TableID}>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -143,7 +157,7 @@ const Snacks = (props: SnacksProps): JSX.Element => {
                                             </div>
                                             <div className='h-full my-auto'>
                                                 <label htmlFor={snack.name} className='text-lg font-bold'>Quantity: </label>
-                                                <input type="number" onChange={handleOnChange} id={snack.snackId.toString()} name={snack.name} placeholder="0" min='0' max='5' className="border-2 border-stone-700 p-1"/>
+                                                <input type="number" onInput={handleOnInput} onChange={handleOnChange} id={snack.snackId.toString()} name={snack.name} ref={ItemValue} placeholder="0" min='0' max='5' className="border-2 border-stone-700 p-1"/>
                                             </div>
                                         </div>
                                     )
