@@ -21,6 +21,7 @@ interface SnacksProps {
 
 const Snacks = (props: SnacksProps): JSX.Element => {
     const [order, setOrder] = React.useState({})
+    const [snackNameQty, setSnackNameQty] = React.useState({})
     const [isSummary, setIsSummary] = React.useState(false)
     const navigate = useNavigate()
     const [grandTotal, setGrandTotal] = React.useState(0)
@@ -39,7 +40,8 @@ const Snacks = (props: SnacksProps): JSX.Element => {
             props.newSnackOrder(orderArr)
         }
         setIsSummary(true)
-    }, [order, props])
+        console.log(snackNameQty)
+    }, [order, props, snackNameQty])
 
     React.useEffect(() => {
         setGrandTotal(0)
@@ -59,10 +61,16 @@ const Snacks = (props: SnacksProps): JSX.Element => {
     const handleOnChange = React.useCallback((e: React.FormEvent<HTMLInputElement>) => {
         const snackId = e.currentTarget.id
         const snackQty = e.currentTarget.value
+        const snackName = e.currentTarget.name
 
         setOrder((prevState) => ({
             ...prevState,
             [snackId]: snackQty
+        }))
+
+        setSnackNameQty((prevState) => ({
+            ...prevState,
+            [snackName]: snackQty
         }))
     }, //eslint-disable-next-line
         [])
