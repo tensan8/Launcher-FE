@@ -118,7 +118,7 @@ const Snacks = (props: SnacksProps): JSX.Element => {
         const orderdata ={
             Table: TableID.current?.value,
             Order: snackOrders,
-            Total: grandTotal.toString() + "RM"
+            Total: "RM" + grandTotal.toString()
         }
 
         PostToDiscord(orderdata);
@@ -136,7 +136,7 @@ const Snacks = (props: SnacksProps): JSX.Element => {
 
                 let completeOrder = ''
                 d[1].forEach((order: SnackInfo) => {
-                    completeOrder = completeOrder + order.name + ' (' + order.price + "RM x " + order.qty + "), "
+                    completeOrder = completeOrder + order.name + ' (RM ' + order.price + " x" + order.qty + "), "
                 })
                 return `Order: ${completeOrder}`
             })
