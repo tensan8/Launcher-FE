@@ -40,8 +40,6 @@ const Snacks = (props: SnacksProps): JSX.Element => {
         return []
     }, [])
 
-    console.log([snackOrders])
-
     React.useEffect(() => {
         if(props.getAllSnacks !== undefined) {
             props.getAllSnacks()
@@ -116,8 +114,14 @@ const Snacks = (props: SnacksProps): JSX.Element => {
 
     const handleDialogClose = React.useCallback(() => {
         setIsSummary(false)
-        console.log(grandTotal)
-        console.log(snackOrders)
+
+        const orderdata ={
+            Table: TableID.current?.value,
+            Order: snackOrders,
+            Total: grandTotal.toString() + "RM"
+        }
+
+        PostToDiscord(orderdata);
         navigate('/')
     }, [navigate, snackOrders, grandTotal])
 
@@ -125,27 +129,24 @@ const Snacks = (props: SnacksProps): JSX.Element => {
 
     const PostToDiscord = (orderdata: {[key:string]:any}) => {
         const order_detail = Object.entries(orderdata)
-        .map((d) => `${d[0]}: ${d[1]}`)
-        .join("\n");
+            .map((d) => {
+                if(d[0] !== 'Order') {
+                    return `${d[0]}: ${d[1]}`
+                }
 
-        console.log(order_detail)
+                let completeOrder = ''
+                d[1].forEach((order: SnackInfo) => {
+                    completeOrder = completeOrder + order.name + ' (' + order.price + "RM x " + order.qty + "), "
+                })
+                return `Order: ${completeOrder}`
+            })
+            .join("\n");
+
         Send(order_detail)
     };
 
     const handleSubmit = React.useCallback((e: React.SyntheticEvent) => {
-
-        //Output format that send to discord
-        const orderdata ={
-            Table: TableID.current?.value,
-            Order: snackOrders[0].name,
-            Quantity: snackOrders[1].qty,
-            RM: snackOrders[2].price,
-        }
-
-        console.log(orderdata)
-
         e.preventDefault();
-        PostToDiscord(orderdata);
         const orderArr = SnackOrderMapper(order, props.userId)
         if(props.newSnackOrder !== undefined) {
             props.newSnackOrder(orderArr)
