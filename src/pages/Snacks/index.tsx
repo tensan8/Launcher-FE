@@ -8,7 +8,7 @@ import {SnackDTO} from "../../dtos/snackDTO";
 import SnackOrderMapper from "../../utils/snackOrderMapper";
 import {newSnackOrder} from "../../store/actions/snackOrderAction";
 import {SnackOrderDTO} from "../../dtos/snackOrderDTO";
-import {Dialog, DialogContent, DialogContentText, DialogTitle} from "@mui/material";
+import {Dialog, DialogContent, DialogContentText, DialogTitle, snackbarContentClasses} from "@mui/material";
 import {useNavigate} from "react-router-dom";
 import Item from 'antd/lib/list/Item';
 import getSnackOrder from '../Webhook/snackorder';
@@ -27,9 +27,10 @@ type SnackInfo = {
     price: number
 }
 
+
 const Snacks = (props: SnacksProps): JSX.Element => {
     const [order, setOrder] = React.useState({})
-    const [orderitemvalue, setOrderItemValue] = React.useState([])
+    // const [orderitemvalue, setOrderItemValue] = React.useState([])
     const [isSummary, setIsSummary] = React.useState(false)
     const navigate = useNavigate()
     const [grandTotal, setGrandTotal] = React.useState(0)
@@ -38,6 +39,8 @@ const Snacks = (props: SnacksProps): JSX.Element => {
     const snackOrders = React.useMemo<SnackInfo[]>(() => {
         return []
     }, [])
+
+    console.log([snackOrders])
 
     React.useEffect(() => {
         if(props.getAllSnacks !== undefined) {
@@ -100,16 +103,16 @@ const Snacks = (props: SnacksProps): JSX.Element => {
 
     //######## Check the result that choosen by the user. (in array format) #####################
     // Issue is that, the output can get multiple value but i cannot split it and put it into the specific value
-    const handleOnInput = React.useCallback((e: React.FormEvent<HTMLInputElement>) => {
-        const snackName = e.currentTarget.name
-        const snackQty = e.currentTarget.value
+    // const handleOnInput = React.useCallback((e: React.FormEvent<HTMLInputElement>) => {
+    //     const snackName = e.currentTarget.name
+    //     const snackQty = e.currentTarget.value
 
-        setOrderItemValue((getitemvalue)=>({
-            ...getitemvalue,
-            [snackName]: snackQty
-        }))
-    }, //eslint-disable-next-line
-        [])
+    //     setOrderItemValue((getitemvalue)=>({
+    //         ...getitemvalue,
+    //         [snackName]: snackQty
+    //     }))
+    // }, //eslint-disable-next-line
+    //     [])
 
     const handleDialogClose = React.useCallback(() => {
         setIsSummary(false)
@@ -125,21 +128,18 @@ const Snacks = (props: SnacksProps): JSX.Element => {
         .map((d) => `${d[0]}: ${d[1]}`)
         .join("\n");
 
-        // console.log(order_detail)
-        //Send(order_detail)
+        console.log(order_detail)
+        Send(order_detail)
     };
 
     const handleSubmit = React.useCallback((e: React.SyntheticEvent) => {
 
-        const testing = orderitemvalue
-        console.log(testing)
-
         //Output format that send to discord
         const orderdata ={
             Table: TableID.current?.value,
-            Order: orderitemvalue,
-            Quantity: orderitemvalue,
-            RM: grandTotal
+            Order: snackOrders[0].name,
+            Quantity: snackOrders[1].qty,
+            RM: snackOrders[2].price,
         }
 
         console.log(orderdata)
@@ -199,7 +199,7 @@ const Snacks = (props: SnacksProps): JSX.Element => {
                                             </div>
                                             <div className='h-full my-auto'>
                                                 <label htmlFor={snack.name} className='text-lg font-bold'>Quantity: </label>
-                                                <input type="number"  onChange={(e) => handleOnChange(e, snack.price)} id={snack.snackId.toString()} name={snack.name} min='0' max='5' className="border-2 border-stone-700 p-1"/>
+                                                <input type="number" onChange={(e) => handleOnChange(e, snack.price)} id={snack.snackId.toString()} name={snack.name} placeholder="0" min='0' max='5' className="border-2 border-stone-700 p-1"/>
                                             </div>
                                         </div>
                                     )
