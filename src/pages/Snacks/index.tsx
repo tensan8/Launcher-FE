@@ -28,7 +28,6 @@ const Snacks = (props: SnacksProps): JSX.Element => {
     const navigate = useNavigate()
     const [grandTotal, setGrandTotal] = React.useState(0)
     const TableID = React.useRef<HTMLSelectElement>(null)
-    const ItemValue = React.useRef<HTMLInputElement>(null)
 
     React.useEffect(() => {
         if(props.getAllSnacks !== undefined) {
@@ -54,7 +53,6 @@ const Snacks = (props: SnacksProps): JSX.Element => {
 
     const handleOnChange = React.useCallback((e: React.FormEvent<HTMLInputElement>) => {
         const snackId = e.currentTarget.id
-        const snackName = e.currentTarget.name
         const snackQty = e.currentTarget.value
 
         setOrder((prevState) => ({
@@ -64,6 +62,9 @@ const Snacks = (props: SnacksProps): JSX.Element => {
     }, //eslint-disable-next-line
         [])
 
+
+    //######## Check the result that choosen by the user. (in array format) #####################
+    // Issue is that, the output can get multiple value but i cannot split it and put it into the specific value
     const handleOnInput = React.useCallback((e: React.FormEvent<HTMLInputElement>) => {
         const snackName = e.currentTarget.name
         const snackQty = e.currentTarget.value
@@ -88,11 +89,15 @@ const Snacks = (props: SnacksProps): JSX.Element => {
         .join("\n");
 
         // console.log(order_detail)
-        Send(order_detail)
+        //Send(order_detail)
     };
 
     const handleSubmit = React.useCallback((e: React.SyntheticEvent) => {
 
+        const testing = orderitemvalue.every[0]
+        console.log(testing)
+
+        //Output format that send to discord
         const orderdata ={
             Table: TableID.current?.value,
             Order: orderitemvalue,
@@ -157,7 +162,7 @@ const Snacks = (props: SnacksProps): JSX.Element => {
                                             </div>
                                             <div className='h-full my-auto'>
                                                 <label htmlFor={snack.name} className='text-lg font-bold'>Quantity: </label>
-                                                <input type="number" onInput={handleOnInput} onChange={handleOnChange} id={snack.snackId.toString()} name={snack.name} ref={ItemValue} placeholder="0" min='0' max='5' className="border-2 border-stone-700 p-1"/>
+                                                <input type="number" onInput={handleOnInput} onChange={handleOnChange} id={snack.snackId.toString()} name={snack.name} placeholder="0" min='0' max='5' className="border-2 border-stone-700 p-1"/>
                                             </div>
                                         </div>
                                     )
