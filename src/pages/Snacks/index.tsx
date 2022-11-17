@@ -94,7 +94,7 @@ const Snacks = (props: SnacksProps): JSX.Element => {
 
     const handleSubmit = React.useCallback((e: React.SyntheticEvent) => {
 
-        const testing = orderitemvalue.every[0]
+        const testing = orderitemvalue
         console.log(testing)
 
         //Output format that send to discord
