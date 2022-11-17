@@ -24,6 +24,10 @@ const Snacks = (props: SnacksProps): JSX.Element => {
     const [isSummary, setIsSummary] = React.useState(false)
     const navigate = useNavigate()
     const [grandTotal, setGrandTotal] = React.useState(0)
+    const TableID = React.useRef<HTMLSelectElement>(null)
+    const ItemName = React.useRef<HTMLLabelElement>(null)
+    const ItemQuantity = React.useRef<HTMLInputElement>(null)
+    
 
     React.useEffect(() => {
         if(props.getAllSnacks !== undefined) {
@@ -34,10 +38,24 @@ const Snacks = (props: SnacksProps): JSX.Element => {
 
     const handleSubmit = React.useCallback((e: React.SyntheticEvent) => {
         e.preventDefault();
+
+        const orderitems ={
+            data:{
+                TableID: TableID,
+                ItemName: ItemName,
+                ItemQuantity:ItemQuantity.current?.value
+            },
+            error: {},
+        };
+
+        console.log(TableID)
+
+        PostToDiscord(orderitems);
         const orderArr = SnackOrderMapper(order, props.userId)
         if(props.newSnackOrder !== undefined) {
             props.newSnackOrder(orderArr)
         }
+        console.log()
         setIsSummary(true)
     }, [order, props])
 
@@ -72,6 +90,14 @@ const Snacks = (props: SnacksProps): JSX.Element => {
         navigate('/')
     }, [navigate])
 
+    const PostToDiscord = (orderitems: {[key: string]: any}) => {
+        const order_item = Object.entries(orderitems)
+        .map((d) => `${d[0]}: ${d[1]}`)
+        .join("\n");
+        console.log(order_item)
+    };
+    
+
     return(
         <div>
             <BackButton backPath = "/"/>
@@ -93,7 +119,7 @@ const Snacks = (props: SnacksProps): JSX.Element => {
                     <div className='form-group'>
                         <label className='font-bold text-lg'>Table:</label>
 
-                        <select id="country" name="country">
+                        <select id="tableid" name="tableid" value={TableID.current?.value}>
                             <option value="1">1</option>
                             <option value="2">2</option>
                             <option value="3">3</option>
@@ -117,7 +143,7 @@ const Snacks = (props: SnacksProps): JSX.Element => {
                                             </div>
                                             <div className='h-full my-auto'>
                                                 <label htmlFor={snack.name} className='text-lg font-bold'>Quantity: </label>
-                                                <input type="number" onChange={handleOnChange} id={snack.snackId.toString()} name={snack.name} min='0' max='5' className="border-2 border-stone-700 p-1"/>
+                                                <input type="number" onChange={handleOnChange} id={snack.snackId.toString()} name={snack.name} placeholder="0" min='0' max='5' className="border-2 border-stone-700 p-1"/>
                                             </div>
                                         </div>
                                     )
