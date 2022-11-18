@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import data from './stockdata.json';
 import './index.css'
+import BackButton from '../BackButton/backbutton';
 
 const Stock = (): JSX.Element => {
 
@@ -82,6 +83,8 @@ const Stock = (): JSX.Element => {
     const [passdatabases] = useState(data);
 
     return (
+        <div>
+            <BackButton backPath = "/"/>
         <div className="database-container">
             <table className="db-table">
             <thead>
@@ -103,6 +106,7 @@ const Stock = (): JSX.Element => {
             ))}
             </tbody>
             </table>
+        </div>
         </div>
     );
 };
