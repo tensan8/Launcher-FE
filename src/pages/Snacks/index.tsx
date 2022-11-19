@@ -30,7 +30,6 @@ type SnackInfo = {
 
 const Snacks = (props: SnacksProps): JSX.Element => {
     const [order, setOrder] = React.useState({})
-    // const [orderitemvalue, setOrderItemValue] = React.useState([])
     const [isSummary, setIsSummary] = React.useState(false)
     const navigate = useNavigate()
     const [grandTotal, setGrandTotal] = React.useState(0)

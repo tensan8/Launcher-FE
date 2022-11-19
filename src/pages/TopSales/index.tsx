@@ -1,4 +1,4 @@
-import * as Chart from "chart.js/auto";
+import * as Chart from "chart.js";
 import { useRef, useEffect, useState } from "react";
 
 const DataVis = (): JSX.Element => {

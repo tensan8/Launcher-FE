@@ -2,11 +2,44 @@ import * as React from 'react'
 import { Button, Table, Form, Input } from 'antd';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import data from './stockdata.json';
+import data1 from './stockdata.json';
 import './index.css'
 import BackButton from '../BackButton/backbutton';
+import TopSales from '../TopSales'
+import {Data} from '../../utils/Data'
+import {SnackState} from "../../type";
+import {connect} from "react-redux";
+import {getAllSnacks} from "../../store/actions/snacksAction";
+import {SnackDTO} from "../../dtos/snackDTO";
+import {SnackOrderDTO} from "../../dtos/snackOrderDTO";
+import Barchart from '../DemoChart'
+import {Bar} from 'react-chartjs-2'
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend,
+  } from 'chart.js';
 
-const Stock = (): JSX.Element => {
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+  );
+
+interface SnacksProps {
+    snackList?: {snackList: SnackDTO[]}
+    snackOrder?: {snackOrder: SnackOrderDTO[]}
+    getAllSnacks?: () => {}
+}
+
+const Stock = (props:SnacksProps): JSX.Element => {
 
     // const [dataSource, setdataSource] = useState([]);
     // const [editingValue, setEditValue] = useState([null]);
@@ -80,7 +113,62 @@ const Stock = (): JSX.Element => {
     //     </div>
     // );
 
-    const [passdatabases] = useState(data);
+    const [passdatabases] = useState(data1);
+    
+    React.useEffect(()=>{
+      if(props.getAllSnacks !== undefined){
+        props.getAllSnacks()
+      }
+    }, [])
+
+    console.log(props.snackList)
+
+
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+    const [data, setData] = useState({
+        labels: labels,
+        datasets: [{
+        label: 'Expenses by Month',
+        data: [65, 59, 80, 81, 56, 55, 40],
+        backgroundColor: [
+            'rgb(153, 102, 255)'
+        ],
+        borderColor: [
+            'rgb(153, 102, 255)'
+        ],
+        borderWidth: 1
+        }]
+    });
+
+    const [chartData, setChartData] = useState({
+        labels: Data.map((data) => data.year), 
+        datasets: [
+          {
+            label: "Users Gained ",
+            data: Data.map((data) => data.userGain),
+            backgroundColor: [
+              "rgba(75,192,192,1)"
+            ],
+            borderColor: "black",
+            borderWidth: 2
+          }
+        ]
+    });
+
+    React.useEffect(() => {
+      if(props.snackOrder !== undefined && props.snackOrder.snackOrder !== undefined) {
+          props.snackOrder.snackOrder.forEach((snack:SnackOrderDTO) => {
+              
+          })
+      }
+  }, [props.snackOrder])
+  
+
+    const [datavisual, setdatavisual] = useState({
+      labels: props.snackOrder?.snackOrder.map((snack:SnackOrderDTO, index:number)=>{
+
+      })
+    });
 
     return (
         <div>
@@ -95,21 +183,33 @@ const Stock = (): JSX.Element => {
                 <th>Action</th>
             </tr>
             </thead>
+            {props.snackList !== undefined &&
+            props.snackList.snackList.length > 0 &&
+            props.snackList.snackList.map((snack: SnackDTO, index: number) => {
+            return(
             <tbody>
-                {passdatabases.map((passdatabase)=> (
-                <tr>
-                <td>{passdatabase.Name}</td>
-                <td>{passdatabase.Price}</td>
-                <td>{passdatabase.Stock}</td>
+              <tr key={index}>
+                <td className='text-left'>{snack.name}</td>
+                <td>{snack.price}</td>
+                <td>{snack.currentStock}</td>
                 <td><button>Edit</button></td>
-            </tr>
-            ))}
+              </tr>
             </tbody>
+            )
+          })}
             </table>
         </div>
+        <Bar
+        data={data}
+        height={300}
+        width={1000}
+        />
         </div>
     );
 };
 
+const mapStateToProps=(snackState: SnackState):any =>({
+  snackList: 'snackList' in snackState && snackState.snackList
+})
 
-export default Stock;
+export default connect(mapStateToProps,{getAllSnacks})(Stock);
