@@ -10,11 +10,12 @@ import Snack from './pages/Snacks'
 import AdminStock from './pages/AdminStock'
 import AdminTable from './pages/AdminTable'
 import SessionChecker from './utils/sessionChecker'
+import DataVis from "./pages/TopSales";
 
 const App = (): any => {
   const { sessionId, setSessionId, resetSessionId } = SessionChecker()
 
-  if (sessionId == null) {
+  if (sessionId !== null) {
     return (
       <BrowserRouter>
         <Routes>
@@ -36,6 +37,7 @@ const App = (): any => {
         <Route path="/snack" element={<Snack {...sessionId}/>} />
         <Route path='/stock' element={<AdminStock/>}/>
         <Route path='/admintable' element={<AdminTable/>}/>
+        <Route path='/datavis' element={<DataVis />}/>
         <Route path = '*' element={<Navigate to='/' replace />} />
       </Routes>
     </BrowserRouter>

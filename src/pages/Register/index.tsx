@@ -16,33 +16,6 @@ const RegistrationPage = (props: any): JSX.Element => {
   const [isDialogOpen, setDialogOpen] = React.useState(false)
   const navigate = useNavigate()
 
-  const clientId = `website-${Math.random() * 100}`
-
-  const client = new Client(
-    '81c6a3b298404ce4bf472251fbd6c76a.s1.eu.hivemq.cloud',
-    +('8884'),
-    clientId
-  )
-
-  client.connect({
-    userName: 'dashboard',
-    password: 'Tabletracking1',
-    cleanSession: true,
-    useSSL: true,
-    onSuccess: () => {
-      console.log('Connected')
-      client.subscribe('table1/rfid_log')
-    },
-    onFailure: () => {
-      console.log('Could not connect to MQTT Broker', 'is-error')
-    }
-  })
-
-  client.onMessageArrived = (message: any) => {
-    const payload = JSON.parse(message.payloadString)
-    setUuid(payload.data.cardUUID)
-  }
-
   const handleSubmit = React.useCallback((e: React.SyntheticEvent) => {
     const userData = {
       cardUUID: uuidRef.current?.value,
