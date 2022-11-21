@@ -8,10 +8,14 @@ import {connect} from "react-redux";
 import {getUser, resetUser} from "../../store/actions/userActions";
 import {getAllTableStatus, resetTableList, updateTableStatus} from "../../store/actions/tableListAction";
 import {TableListState, UserState} from "../../type";
+import {UserDTO} from "../../dtos/userDTO";
 
 interface DashboardProps {
+    sessionId: any
     sessionReset: any
     resetUser?: () => {}
+    getUser?: (id: number) => {}
+    user?: { user: UserDTO }
 }
 
 const Dashboard = (props: DashboardProps): JSX.Element => {
@@ -29,6 +33,12 @@ const Dashboard = (props: DashboardProps): JSX.Element => {
         e.preventDefault()
     }, [navigate, props])
 
+    React.useEffect(() => {
+        if(props.getUser !== undefined && props.sessionId !== undefined && props.sessionId && props.user !== undefined) {
+            props.getUser(props.sessionId)
+        }
+    }, [])
+
   return (
         <div className="dashboard">
             <div className="dashboard_box">
@@ -37,13 +47,16 @@ const Dashboard = (props: DashboardProps): JSX.Element => {
                     <img src={logo} alt="logo" className='nekonya'></img>
                 </div>
                 <div className="dashboard_container">
-                    <div className="catbox cursor-pointer" onClick={(e) => {
-                        e.preventDefault()
-                        navigate("/Snack")
-                    }}>
-                        <img src={drinks} alt="drinks" />
-                        <span>Snacks</span>
-                    </div>
+                    {props.user !== undefined && props.user.user && props.user.user.role === 'customer'
+                        ?   <div className="catbox cursor-pointer" onClick={(e) => {
+                                e.preventDefault()
+                                navigate("/Snack")
+                            }}>
+                                <img src={drinks} alt="drinks" />
+                                <span>Snacks</span>
+                            </div>
+                        :   <div> Admin </div>
+                    }
 
                     <div className="catbox cursor-pointer" onClick={(e) => {
                         e.preventDefault()
@@ -61,4 +74,4 @@ const Dashboard = (props: DashboardProps): JSX.Element => {
 
 const mapStateToProps = (userState: UserState): any => ({user: userState.user})
 
-export default connect(mapStateToProps, {resetUser})(Dashboard)
+export default connect(mapStateToProps, {getUser, resetUser})(Dashboard)

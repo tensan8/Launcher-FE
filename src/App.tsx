@@ -15,7 +15,7 @@ import DataVis from "./pages/TopSales";
 const App = (): any => {
   const { sessionId, setSessionId, resetSessionId } = SessionChecker()
 
-  if (sessionId !== null) {
+  if (sessionId === null) {
     return (
       <BrowserRouter>
         <Routes>
@@ -30,8 +30,8 @@ const App = (): any => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Dashboard sessionReset={resetSessionId}/>} />
-        <Route path="/dashboard" element={<Dashboard sessionReset={resetSessionId}/>} />
+        <Route path="/" element={<Dashboard sessionId={sessionId} sessionReset={resetSessionId}/>} />
+        <Route path="/dashboard" element={<Dashboard sessionId={sessionId} sessionReset={resetSessionId}/>} />
         <Route path="/table" element={<Table userId={sessionId}/>} />
         <Route path="/booking" element={<Booking/>} />
         <Route path="/snack" element={<Snack {...sessionId}/>} />
