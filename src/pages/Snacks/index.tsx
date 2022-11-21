@@ -97,20 +97,6 @@ const Snacks = (props: SnacksProps): JSX.Element => {
         }
     }, [])
 
-
-    //######## Check the result that choosen by the user. (in array format) #####################
-    // Issue is that, the output can get multiple value but i cannot split it and put it into the specific value
-    // const handleOnInput = React.useCallback((e: React.FormEvent<HTMLInputElement>) => {
-    //     const snackName = e.currentTarget.name
-    //     const snackQty = e.currentTarget.value
-
-    //     setOrderItemValue((getitemvalue)=>({
-    //         ...getitemvalue,
-    //         [snackName]: snackQty
-    //     }))
-    // }, //eslint-disable-next-line
-    //     [])
-
     const handleDialogClose = React.useCallback(() => {
         setIsSummary(false)
 
