@@ -5,13 +5,13 @@ import { useState } from 'react';
 import data1 from './stockdata.json';
 import './index.css'
 import BackButton from '../BackButton/backbutton';
-import TopSales from '../TopSales'
 import {Data} from '../../utils/Data'
-import {SnackState} from "../../type";
+import {GetSnackOrderState, SnackState} from "../../type";
 import {connect} from "react-redux";
 import {getAllSnacks} from "../../store/actions/snacksAction";
+import {GetAllOrder} from "../../store/actions/orderListAction";
 import {SnackDTO} from "../../dtos/snackDTO";
-import {SnackOrderDTO} from "../../dtos/snackOrderDTO";
+import { OrderListDTO } from '../../dtos/orderListDTO';
 import Barchart from '../DemoChart'
 import {Bar} from 'react-chartjs-2'
 import {
@@ -23,7 +23,6 @@ import {
     Tooltip,
     Legend,
   } from 'chart.js';
-import { StockDTO } from '../../dtos/stockDTO';
 
   ChartJS.register(
     CategoryScale,
@@ -36,8 +35,9 @@ import { StockDTO } from '../../dtos/stockDTO';
 
 interface SnacksProps {
     snackList?: {snackList: SnackDTO[]}
-    snackOrder?: {snackOrder: SnackOrderDTO[] | StockDTO[]}
+    orderList?: {orderList:OrderListDTO[]}
     getAllSnacks?: () => {}
+    GetAllOrder?: () =>{}
 }
 
 const Stock = (props:SnacksProps): JSX.Element => {
@@ -115,15 +115,18 @@ const Stock = (props:SnacksProps): JSX.Element => {
     // );
 
     const [passdatabases] = useState(data1);
+    const [datavalue,setdatavalue] = React.useState ({})
+
+    
     
     React.useEffect(()=>{
-      if(props.getAllSnacks !== undefined){
+      if(props.getAllSnacks !== undefined && props.GetAllOrder !== undefined){
         props.getAllSnacks()
+        props.GetAllOrder()
       }
     }, [])
 
-    console.log()
-
+    console.log(datavalue);
 
     const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
     const [data, setData] = useState({
@@ -142,33 +145,31 @@ const Stock = (props:SnacksProps): JSX.Element => {
     });
 
     const [chartData, setChartData] = useState({
-        labels: Data.map((data) => data.year), 
-        datasets: [
-          {
-            label: "Users Gained ",
-            data: Data.map((data) => data.userGain),
-            backgroundColor: [
-              "rgba(75,192,192,1)"
-            ],
-            borderColor: "black",
-            borderWidth: 2
-          }
-        ]
+      labels: Data.map((data) => data.year), 
+      datasets: [
+        {
+          label: "Users Gained ",
+          data: Data.map((data) => data.userGain),
+          backgroundColor: [
+            "rgba(75,192,192,1)"
+          ],
+          borderColor: "black",
+          borderWidth: 2
+        }
+      ]
     });
+    
 
-    React.useEffect(() => {
-      if(props.snackOrder !== undefined && props.snackOrder.snackOrder !== undefined) {
-          props.snackOrder.snackOrder.forEach((snack:SnackOrderDTO) => {
-              
-          })
+    React.useEffect(()=>{
+      if(props.orderList !== undefined){
+        props.orderList.orderList.map((orderdata: OrderListDTO, index:number)=>{
+          console.log(orderdata.quantity)
+        })
       }
-  }, [props.snackOrder])
-  
+    },[]);
 
     const [datavisual, setdatavisual] = useState({
-      labels: props.snackOrder?.snackOrder.map((snack:SnackOrderDTO, index:number)=>{
-
-      })
+      labels: datavalue
     });
 
     return (
@@ -209,8 +210,9 @@ const Stock = (props:SnacksProps): JSX.Element => {
     );
 };
 
-const mapStateToProps=(snackState: SnackState):any =>({
-  snackList: 'snackList' in snackState && snackState.snackList
+const mapStateToProps=(snackState: SnackState | GetSnackOrderState):any =>({
+  snackList: 'snackList' in snackState && snackState.snackList,
+  orderList: 'orderList' in snackState && snackState.orderList
 })
 
-export default connect(mapStateToProps,{getAllSnacks})(Stock);
+export default connect(mapStateToProps,{getAllSnacks,GetAllOrder})(Stock);

@@ -1,13 +1,11 @@
 import axios from 'axios'
 import { Dispatch } from 'redux'
 import * as actionTypes from '../actionTypes'
-//import {StockDTO} from '../../dtos/snackDTO'
 
-export const getSnackStock = (): any => {
-    return async (dispatch: Dispatch) => {
+export const GetAllOrder = ():any =>{
+    return async (dispatch:Dispatch)=>{
         try {
-            const response = await axios.get(`${process.env.REACT_APP_HOST ?? ''}/stock-order/` ?? '')
-
+            const response = await axios.get(`${process.env.REACT_APP_HOST ?? ''}/snack-order/visualization` ?? '')
             dispatch({
                 type: actionTypes.GET_SNACK_ORDER,
                 data: response.data

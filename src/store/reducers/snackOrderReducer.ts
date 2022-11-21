@@ -10,15 +10,8 @@ const snackOrderReducer = (state: SnackOrderState = initialState, action: Action
                 ...state,
                 snackOrder: action.data
             }
-
-        case actionTypes.GET_SNACK_ORDER:
-            return {
-                ...state,
-                snackOrder:action.data
-            }
         default:
             return state
-
     }
 }
 
