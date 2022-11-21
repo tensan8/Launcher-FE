@@ -11,7 +11,7 @@ function BackButton (props: { backPath: To | any }): JSX.Element {
   }, [navigate, props.backPath])
 
   return (
-        <div className="my-3 mx-5">
+        <div className="my-5 mx-10">
             <img src={backArrow} alt="Back Arrow" className="h-7 cursor-pointer" onClick={handleBack}/>
         </div>
   )

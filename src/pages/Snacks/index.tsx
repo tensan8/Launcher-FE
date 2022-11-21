@@ -156,7 +156,9 @@ const Snacks = (props: SnacksProps): JSX.Element => {
 
     return(
         <div>
+            <div className='absolute'>
             <BackButton backPath = "/"/>
+            </div>
             <div className='my-6 mx-auto'>
                     <h1 className='text-center font-bold text-5xl text-white my-2'>Neko Neko Nyaa</h1>
                     <img src={logo} alt="logo" className='mx-auto'/>

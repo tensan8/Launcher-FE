@@ -3,6 +3,7 @@ import { TableListDTO } from './dtos/tableListDTO'
 import {SnackDTO} from "./dtos/snackDTO";
 import {TableDTO} from "./dtos/tableDTO";
 import {BookingDTO} from "./dtos/bookingDTO";
+import {StockDTO} from './dtos/stockDTO';
 
 interface UserState { user: UserDTO | null }
 
@@ -14,7 +15,7 @@ interface TableState { user: TableDTO }
 
 interface SnackState { snackList?: SnackDTO[] }
 
-interface SnackOrderState { snackOrder?: SnackOrderResponse[] }
+interface SnackOrderState { snackOrder?: SnackOrderResponse[] | StockDTO[] }
 
 interface BookingState { booking?: BookingDTO }
 
@@ -35,3 +36,5 @@ interface SnackOrderResponse {
   totalAmount?: number
   snackOrderId?: number
 }
+
+

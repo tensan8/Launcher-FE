@@ -23,6 +23,7 @@ import {
     Tooltip,
     Legend,
   } from 'chart.js';
+import { StockDTO } from '../../dtos/stockDTO';
 
   ChartJS.register(
     CategoryScale,
@@ -35,7 +36,7 @@ import {
 
 interface SnacksProps {
     snackList?: {snackList: SnackDTO[]}
-    snackOrder?: {snackOrder: SnackOrderDTO[]}
+    snackOrder?: {snackOrder: SnackOrderDTO[] | StockDTO[]}
     getAllSnacks?: () => {}
 }
 
@@ -121,7 +122,7 @@ const Stock = (props:SnacksProps): JSX.Element => {
       }
     }, [])
 
-    console.log(props.snackList)
+    console.log()
 
 
     const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
@@ -172,7 +173,7 @@ const Stock = (props:SnacksProps): JSX.Element => {
 
     return (
         <div>
-            <BackButton backPath = "/"/>
+        <BackButton backPath = "/"/>
         <div className="database-container">
             <table className="db-table">
             <thead>
