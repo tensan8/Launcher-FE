@@ -1,18 +1,14 @@
 import * as React from 'react'
-import { Button, Table, Form, Input } from 'antd';
 import { useEffect } from 'react';
 import { useState } from 'react';
-import data1 from './stockdata.json';
 import './index.css'
 import BackButton from '../BackButton/backbutton';
-import {Data} from '../../utils/Data'
 import {GetSnackOrderState, SnackState} from "../../type";
 import {connect} from "react-redux";
 import {getAllSnacks} from "../../store/actions/snacksAction";
 import {GetAllOrder} from "../../store/actions/orderListAction";
 import {SnackDTO} from "../../dtos/snackDTO";
 import { OrderListDTO } from '../../dtos/orderListDTO';
-import Barchart from '../DemoChart'
 import {Bar} from 'react-chartjs-2'
 import {
     Chart as ChartJS,
@@ -33,6 +29,19 @@ import {
     Legend
   );
 
+  export const options = {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Top Sales',
+      },
+    },
+  };
+
 interface SnacksProps {
     snackList?: {snackList: SnackDTO[]}
     orderList?: {orderList:OrderListDTO[]}
@@ -52,37 +61,7 @@ const Stock = (props:SnacksProps): JSX.Element => {
       }
     }, [])
 
-    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-    const [data, setData] = useState({
-        labels: labels,
-        datasets: [{
-        label: 'Expenses by Month',
-        data: [65, 59, 80, 81, 56, 55, 40],
-        backgroundColor: [
-            'rgb(153, 102, 255)'
-        ],
-        borderColor: [
-            'rgb(153, 102, 255)'
-        ],
-        borderWidth: 1
-        }]
-    });
-
-    const [chartData, setChartData] = useState({
-      labels: Data.map((data) => data.year), 
-      datasets: [
-        {
-          label: "Users Gained ",
-          data: Data.map((data) => data.userGain),
-          backgroundColor: [
-            "rgba(75,192,192,1)"
-          ],
-          borderColor: "black",
-          borderWidth: 2
-        }
-      ]
-    });
-    
+    console.log(props.snackList)
 
     React.useEffect(()=>{
 
@@ -98,16 +77,14 @@ const Stock = (props:SnacksProps): JSX.Element => {
       }
     },[props.orderList?.orderList]);
 
-    const [datavisual, setdatavisual] = useState({
+    const [datavisual] = useState({
+      type:'bar',
       labels: itemname,
       datasets: [{
-      label: 'Hot Sales',
+      label: 'Snack Name',
       data: itemquantity,
       backgroundColor: [
-        'rgb(153, 102, 255)'
-      ],
-      borderColor: [
-        'rgb(153, 102, 255)'
+        'rgb(153, 255, 255)'
       ],
       borderWidth: 1
       }]
@@ -142,11 +119,12 @@ const Stock = (props:SnacksProps): JSX.Element => {
           })}
             </table>
         </div>
-        <Bar
-        data={datavisual}
-        height={100}
-        width={500}
-        />
+        <div className='mx-auto w-4/6'>
+          <Bar
+          data={datavisual}
+          options={options}
+          />
+        </div>
         </div>
     );
 };
@@ -154,7 +132,8 @@ const Stock = (props:SnacksProps): JSX.Element => {
 const mapStateToProps=(snackState: SnackState | GetSnackOrderState):any =>({
   snackList: 'snackList' in snackState && snackState.snackList,
   orderList: 'orderList' in snackState && snackState.orderList
-})
+});
+
 
 export default connect(mapStateToProps,{getAllSnacks,GetAllOrder})(Stock);
 
@@ -229,3 +208,34 @@ export default connect(mapStateToProps,{getAllSnacks,GetAllOrder})(Stock);
 //         </header>
 //     </div>
 // );
+
+// const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+//     const [data, setData] = useState({
+//         labels: labels,
+//         datasets: [{
+//         label: 'Expenses by Month',
+//         data: [65, 59, 80, 81, 56, 55, 40],
+//         backgroundColor: [
+//             'rgb(153, 102, 255)'
+//         ],
+//         borderColor: [
+//             'rgb(153, 102, 255)'
+//         ],
+//         borderWidth: 1
+//         }]
+//     });
+
+//     const [chartData, setChartData] = useState({
+//       labels: Data.map((data) => data.year), 
+//       datasets: [
+//         {
+//           label: "Users Gained ",
+//           data: Data.map((data) => data.userGain),
+//           backgroundColor: [
+//             "rgba(75,192,192,1)"
+//           ],
+//           borderColor: "black",
+//           borderWidth: 2
+//         }
+//       ]
+//     });
