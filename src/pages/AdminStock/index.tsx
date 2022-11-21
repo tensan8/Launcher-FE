@@ -41,79 +41,6 @@ interface SnacksProps {
 }
 
 const Stock = (props:SnacksProps): JSX.Element => {
-
-    // const [dataSource, setdataSource] = useState([]);
-    // const [editingValue, setEditValue] = useState([null]);
-
-    // useEffect(()=>{
-    //     const data = [];
-    //     for (let index = 0; index < 7; index++){
-    //         data.push({
-    //             key: `${index}`,
-    //             name: `Name ${index}`,
-    //             quantity: `Quantity ${index}`,
-    //         });
-    //     }
-    //     // setdataSource(data);
-    // },[]);
-
-    // const columns = [
-    //     {
-    //         title:'Name',
-    //         dataIndex: 'name',
-    //     },
-    //     {
-    //         title: 'Quantity',
-    //         dataIndex: 'quantity',
-
-    //         render:(text:any, record:any)=>{
-    //             if(editingValue === record.key){
-    //                 return (
-    //                     <Form.Item
-    //                     name = 'name'
-    //                     rules={[{
-    //                         required:true,
-    //                         message:"Please enter value",
-    //                     },
-    //                 ]}
-    //                 >
-    //                     <Input/>
-    //                 </Form.Item>
-    //                 )
-    //             }else{
-    //                 return <p>{text}</p>
-    //             }
-    //         }
-    //     },
-    //     {
-    //         title: 'Actions',
-    //         render: (_: any,record:any)=>{
-    //             return (
-    //                 <div>
-    //                     <Button type='link' onClick={()=>{
-    //                         setEditValue(record.key)
-    //                     }}>Edit</Button>
-    //                     <Button type='link'>Save</Button>
-    //                 </div>
-    //             );
-    //         },
-    //     },
-    // ];
-
-    // return(
-    //     <div>
-    //         <header>
-    //             <Form>
-    //                 <Table
-    //                 columns={columns}
-    //                 dataSource={dataSource}>
-
-    //                 </Table>
-    //             </Form>
-    //         </header>
-    //     </div>
-    // );
-
     const [passdatabases] = useState(data1);
     const [datavalue,setdatavalue] = React.useState ({})
 
@@ -125,8 +52,6 @@ const Stock = (props:SnacksProps): JSX.Element => {
         props.GetAllOrder()
       }
     }, [])
-
-    console.log(datavalue);
 
     const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
     const [data, setData] = useState({
@@ -162,11 +87,11 @@ const Stock = (props:SnacksProps): JSX.Element => {
 
     React.useEffect(()=>{
       if(props.orderList !== undefined){
-        props.orderList.orderList.map((orderdata: OrderListDTO, index:number)=>{
-          console.log(orderdata.quantity)
+        props.orderList.orderList.forEach((orderdata: OrderListDTO, index:number)=>{
+          console.log(orderdata.totalQuantity)
         })
       }
-    },[]);
+    },[props.orderList?.orderList]);
 
     const [datavisual, setdatavisual] = useState({
       labels: datavalue
@@ -216,3 +141,75 @@ const mapStateToProps=(snackState: SnackState | GetSnackOrderState):any =>({
 })
 
 export default connect(mapStateToProps,{getAllSnacks,GetAllOrder})(Stock);
+
+// const [dataSource, setdataSource] = useState([]);
+// const [editingValue, setEditValue] = useState([null]);
+
+// useEffect(()=>{
+//     const data = [];
+//     for (let index = 0; index < 7; index++){
+//         data.push({
+//             key: `${index}`,
+//             name: `Name ${index}`,
+//             quantity: `Quantity ${index}`,
+//         });
+//     }
+//     // setdataSource(data);
+// },[]);
+
+// const columns = [
+//     {
+//         title:'Name',
+//         dataIndex: 'name',
+//     },
+//     {
+//         title: 'Quantity',
+//         dataIndex: 'quantity',
+
+//         render:(text:any, record:any)=>{
+//             if(editingValue === record.key){
+//                 return (
+//                     <Form.Item
+//                     name = 'name'
+//                     rules={[{
+//                         required:true,
+//                         message:"Please enter value",
+//                     },
+//                 ]}
+//                 >
+//                     <Input/>
+//                 </Form.Item>
+//                 )
+//             }else{
+//                 return <p>{text}</p>
+//             }
+//         }
+//     },
+//     {
+//         title: 'Actions',
+//         render: (_: any,record:any)=>{
+//             return (
+//                 <div>
+//                     <Button type='link' onClick={()=>{
+//                         setEditValue(record.key)
+//                     }}>Edit</Button>
+//                     <Button type='link'>Save</Button>
+//                 </div>
+//             );
+//         },
+//     },
+// ];
+
+// return(
+//     <div>
+//         <header>
+//             <Form>
+//                 <Table
+//                 columns={columns}
+//                 dataSource={dataSource}>
+
+//                 </Table>
+//             </Form>
+//         </header>
+//     </div>
+// );

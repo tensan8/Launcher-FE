@@ -1,4 +1,4 @@
 export interface OrderListDTO{
-    name: string,
-    quantity:number
+    SnackName: string,
+    totalQuantity:number
   }
