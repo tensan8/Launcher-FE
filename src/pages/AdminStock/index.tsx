@@ -41,11 +41,10 @@ interface SnacksProps {
 }
 
 const Stock = (props:SnacksProps): JSX.Element => {
-    const [passdatabases] = useState(data1);
-    const [datavalue,setdatavalue] = React.useState ({})
 
-    
-    
+    const itemname:String[] = []
+    const itemquantity: number[] = []
+
     React.useEffect(()=>{
       if(props.getAllSnacks !== undefined && props.GetAllOrder !== undefined){
         props.getAllSnacks()
@@ -86,15 +85,32 @@ const Stock = (props:SnacksProps): JSX.Element => {
     
 
     React.useEffect(()=>{
+
       if(props.orderList !== undefined){
         props.orderList.orderList.forEach((orderdata: OrderListDTO, index:number)=>{
-          console.log(orderdata.totalQuantity)
+          itemquantity.push(
+            orderdata.totalQuantity
+          )
+          itemname.push(
+            orderdata.SnackName
+          )
         })
       }
     },[props.orderList?.orderList]);
 
     const [datavisual, setdatavisual] = useState({
-      labels: datavalue
+      labels: itemname,
+      datasets: [{
+      label: 'Hot Sales',
+      data: itemquantity,
+      backgroundColor: [
+        'rgb(153, 102, 255)'
+      ],
+      borderColor: [
+        'rgb(153, 102, 255)'
+      ],
+      borderWidth: 1
+      }]
     });
 
     return (
@@ -127,9 +143,9 @@ const Stock = (props:SnacksProps): JSX.Element => {
             </table>
         </div>
         <Bar
-        data={data}
-        height={300}
-        width={1000}
+        data={datavisual}
+        height={100}
+        width={500}
         />
         </div>
     );
