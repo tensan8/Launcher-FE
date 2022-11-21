@@ -31,6 +31,7 @@ import {
 
   export const options = {
     responsive: true,
+    maintainAspectRatio: true,
     plugins: {
       legend: {
         position: 'top' as const,
@@ -61,18 +62,20 @@ const Stock = (props:SnacksProps): JSX.Element => {
       }
     }, [])
 
-    console.log(props.snackList)
-
     React.useEffect(()=>{
 
       if(props.orderList !== undefined){
         props.orderList.orderList.forEach((orderdata: OrderListDTO, index:number)=>{
-          itemquantity.push(
-            orderdata.totalQuantity
-          )
-          itemname.push(
-            orderdata.SnackName
-          )
+          if(!itemname.includes(orderdata.SnackName)){
+            itemname.push(
+              orderdata.SnackName
+            )
+          }
+          if(!itemquantity.includes(orderdata.totalQuantity)){
+            itemquantity.push(
+              orderdata.totalQuantity
+            )
+          }
         })
       }
     },[props.orderList?.orderList]);
@@ -86,7 +89,8 @@ const Stock = (props:SnacksProps): JSX.Element => {
       backgroundColor: [
         'rgb(153, 255, 255)'
       ],
-      borderWidth: 1
+      borderColor:'black',
+      borderWidth: 1,
       }]
     });
 
@@ -119,7 +123,7 @@ const Stock = (props:SnacksProps): JSX.Element => {
           })}
             </table>
         </div>
-        <div className='mx-auto w-4/6'>
+        <div className='mx-auto w-[1000px] bg-stone-400 p-4 my-10'>
           <Bar
           data={datavisual}
           options={options}
