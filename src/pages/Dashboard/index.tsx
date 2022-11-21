@@ -67,7 +67,13 @@ const Dashboard = (props: DashboardProps): JSX.Element => {
                     </div>
                 </div>
             </div>
-            <h1 className='font-bold text-red-600 cursor-pointer' onClick={handleLogout}>Logout</h1>
+            <div className='flex w-full'>
+                <h1 className='font-bold text-gray-500 hover:text-blue-500 transition duration-500 w-fit mx-auto cursor-pointer text-center mt-10 text-2xl'
+                    onClick={handleLogout}
+                >
+                    Logout
+                </h1>
+            </div>
         </div>
   )
 }
