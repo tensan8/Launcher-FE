@@ -50,39 +50,62 @@ interface SnacksProps {
     GetAllOrder?: () =>{}
 }
 
+
 const Stock = (props:SnacksProps): JSX.Element => {
 
-    const itemname:String[] = []
-    const itemquantity: number[] = []
+    // const itemquantity = React.useState<number[]>(() =>{return[]})
+    
+    // const itemname = React.useState<String[]>(() =>{return[]})
+
+    const itemname = React.useMemo<String[]>(()=>{
+      return []
+    },[])
+
+    const itemquantity = React.useMemo<Number[]>(()=>{
+      return []
+    },[])
+    
+    React.useEffect(()=>{
+      if(props.getAllSnacks !== undefined){
+        props.getAllSnacks()
+      }
+    }, //eslint-disable-next-line
+      [])
 
     React.useEffect(()=>{
-      if(props.getAllSnacks !== undefined && props.GetAllOrder !== undefined){
-        props.getAllSnacks()
+      if(props.GetAllOrder !== undefined){
         props.GetAllOrder()
       }
-    }, [])
+    }, //eslint-disable-next-line 
+      [])
 
     React.useEffect(()=>{
-
       if(props.orderList !== undefined){
+        itemquantity.length = 0
+
         props.orderList.orderList.forEach((orderdata: OrderListDTO, index:number)=>{
-          if(!itemname.includes(orderdata.SnackName)){
-            itemname.push(
-              orderdata.SnackName
-            )
+          
+          if(itemname !== null){ 
+            if(!itemname.includes(orderdata.SnackName)){
+              itemname.push(
+                orderdata.SnackName
+              )
+            }
           }
-          if(!itemquantity.includes(orderdata.totalQuantity)){
-            itemquantity.push(
-              orderdata.totalQuantity
-            )
+          if(itemquantity !== null){
+            if(!itemquantity.includes(orderdata.totalQuantity)){
+              itemquantity.push(
+                orderdata.totalQuantity
+              )
+            }
           }
         })
       }
-    },[props.orderList?.orderList]);
+    },[props.orderList?.orderList, itemname, itemquantity]);
 
-    const [datavisual] = useState({
+    const datavisual = {
       type:'bar',
-      labels: itemname,
+      labels: itemname ,
       datasets: [{
       label: 'Snack Name',
       data: itemquantity,
@@ -92,11 +115,14 @@ const Stock = (props:SnacksProps): JSX.Element => {
       borderColor:'black',
       borderWidth: 1,
       }]
-    });
+    };
 
     return (
         <div>
-        <BackButton backPath = "/"/>
+          <div className='my-8 mx-12'>
+          <BackButton backPath = "/"/>
+          </div>
+        
         <div className="database-container">
             <table className="db-table">
             <thead>
@@ -136,8 +162,7 @@ const Stock = (props:SnacksProps): JSX.Element => {
 const mapStateToProps=(snackState: SnackState | GetSnackOrderState):any =>({
   snackList: 'snackList' in snackState && snackState.snackList,
   orderList: 'orderList' in snackState && snackState.orderList
-});
-
+})
 
 export default connect(mapStateToProps,{getAllSnacks,GetAllOrder})(Stock);
 

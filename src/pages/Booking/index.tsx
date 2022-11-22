@@ -66,7 +66,9 @@ const Booking = (props: any): JSX.Element => {
 
     return (
         <div>
-        <BackButton backPath = {-1}/>
+            <div className='mx-16 my-[-20px]  absolute'>
+            <BackButton backPath = {-1}/>
+            </div>
         <div className="grid place-items-center my-16">
             <div className='flex my-3'>
                 <h1 className='font-bold text-5xl text-white my-auto'>Neko Neko Nyaa</h1>

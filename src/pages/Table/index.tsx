@@ -90,8 +90,11 @@ const Table = (props: tableProps): JSX.Element => {
   }, [currentTableId])
 
   return (
+    <div>
+    <div className='my-10 mx-16 absolute'>
+      <BackButton backPath = {-1}/>
+    </div>
     <div className='booking_seat'>
-        <BackButton backPath = {-1}/>
         <ul className="showcase">
           {tableStatusList.map((status: string, index: number) => {
             return (
@@ -135,6 +138,7 @@ const Table = (props: tableProps): JSX.Element => {
                )
              })}
         </div>
+    </div>
     </div>
   )
 }
