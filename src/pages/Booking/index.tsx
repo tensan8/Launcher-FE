@@ -43,16 +43,16 @@ const Booking = (props: any): JSX.Element => {
         navigate('/')
     }, [])
 
-    // const [formData, setFormData] = useState({
-    //     data:{
-    //         UserID: userId,
-    //         TableNo: tableId,
-    //         booking_date: '',
-    //         booking_starttime: '',
-    //         booking_endtime: '',
-    //     },
-    //     error: {},
-    // });
+    const [formData, setFormData] = useState({
+        data:{
+            UserID: userId,
+            TableNo: tableId,
+            booking_date: '',
+            booking_starttime: '',
+            booking_endtime: '',
+        },
+        error: {},
+    });
 
     const {Send}=TableBooking();
 
