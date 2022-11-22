@@ -3,11 +3,13 @@ import { useEffect } from 'react';
 import { useState } from 'react';
 import './index.css'
 import BackButton from '../BackButton/backbutton';
-import {GetSnackOrderState, SnackState} from "../../type";
+import {BookingListState, GetSnackOrderState, SnackState} from "../../type";
 import {connect} from "react-redux";
 import {getAllSnacks} from "../../store/actions/snacksAction";
 import {GetAllOrder} from "../../store/actions/orderListAction";
+import {GetAllBookingVis } from '../../store/actions/bookingAction';
 import {SnackDTO} from "../../dtos/snackDTO";
+import { BookingDayDTO } from '../../dtos/bookingdataDTO';
 import { OrderListDTO } from '../../dtos/orderListDTO';
 import {Bar} from 'react-chartjs-2'
 import {
@@ -43,19 +45,31 @@ import {
     },
   };
 
+  export const options2 = {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+      title: {
+        display: true,
+        text: 'Weekly Booking Details',
+      },
+    },
+  };
+
 interface SnacksProps {
     snackList?: {snackList: SnackDTO[]}
     orderList?: {orderList:OrderListDTO[]}
+    bookingList?: {bookingList:BookingDayDTO[]}
     getAllSnacks?: () => {}
     GetAllOrder?: () =>{}
+    GetAllBookingVis?:() => {}
 }
 
 
 const Stock = (props:SnacksProps): JSX.Element => {
-
-    // const itemquantity = React.useState<number[]>(() =>{return[]})
-    
-    // const itemname = React.useState<String[]>(() =>{return[]})
 
     const itemname = React.useMemo<String[]>(()=>{
       return []
@@ -64,19 +78,25 @@ const Stock = (props:SnacksProps): JSX.Element => {
     const itemquantity = React.useMemo<Number[]>(()=>{
       return []
     },[])
+
+    const bookingday = React.useMemo<Number[]>(()=>{
+      return[]
+    },[])
+
+    const bookingtotal = React.useMemo<Number[]>(()=>{
+      return[]
+    },[])
+
+    console.log(props.orderList)
+
     
     React.useEffect(()=>{
-      if(props.getAllSnacks !== undefined){
+      if(props.getAllSnacks !== undefined && props.GetAllOrder !== undefined && props.GetAllBookingVis !== undefined){
         props.getAllSnacks()
+        props.GetAllOrder()
+        props.GetAllBookingVis()
       }
     }, //eslint-disable-next-line
-      [])
-
-    React.useEffect(()=>{
-      if(props.GetAllOrder !== undefined){
-        props.GetAllOrder()
-      }
-    }, //eslint-disable-next-line 
       [])
 
     React.useEffect(()=>{
@@ -103,8 +123,28 @@ const Stock = (props:SnacksProps): JSX.Element => {
       }
     },[props.orderList?.orderList, itemname, itemquantity]);
 
+    React.useEffect(()=>{
+      if(props.bookingList !== undefined){
+
+        props.bookingList.bookingList.forEach((bookingdata: BookingDayDTO, index:number)=>{
+          
+          if(bookingday !== null){ 
+              bookingday.push(
+                bookingdata.Day
+              )
+          }
+          if(bookingtotal !== null){ 
+            bookingtotal.push(
+              bookingdata.total
+            )
+          }
+        })
+      }
+    },[props.orderList?.orderList, bookingday,bookingtotal]);
+
+  
+
     const datavisual = {
-      type:'bar',
       labels: itemname ,
       datasets: [{
       label: 'Snack Name',
@@ -116,6 +156,21 @@ const Stock = (props:SnacksProps): JSX.Element => {
       borderWidth: 1,
       }]
     };
+
+    const datavisual2 = {
+      labels: [0,1,2,3,4,5,6] ,
+      datasets: [{
+      label: 'Day',
+      data: [2,4,5,1,0,0,0],
+      backgroundColor: [
+        'rgb(153, 255, 255)'
+      ],
+      borderColor:'black',
+      borderWidth: 1,
+      }]
+    };
+
+  
 
     return (
         <div>
@@ -155,16 +210,23 @@ const Stock = (props:SnacksProps): JSX.Element => {
           options={options}
           />
         </div>
+        <div className='mx-auto w-[1000px] bg-stone-400 p-4 my-10'>
+          <Bar
+          data={datavisual2}
+          options={options2}
+          />
+        </div>
         </div>
     );
 };
 
-const mapStateToProps=(snackState: SnackState | GetSnackOrderState):any =>({
+const mapStateToProps=(snackState: SnackState | GetSnackOrderState | BookingListState):any =>({
   snackList: 'snackList' in snackState && snackState.snackList,
-  orderList: 'orderList' in snackState && snackState.orderList
+  orderList: 'orderList' in snackState && snackState.orderList,
+  bookingList: 'bookingList' in snackState && snackState.bookingList
 })
 
-export default connect(mapStateToProps,{getAllSnacks,GetAllOrder})(Stock);
+export default connect(mapStateToProps,{getAllSnacks,GetAllOrder, GetAllBookingVis})(Stock);
 
 // const [dataSource, setdataSource] = useState([]);
 // const [editingValue, setEditValue] = useState([null]);

@@ -4,6 +4,7 @@ import {SnackDTO} from "./dtos/snackDTO";
 import {TableDTO} from "./dtos/tableDTO";
 import {BookingDTO} from "./dtos/bookingDTO";
 import {OrderListDTO} from './dtos/orderListDTO';
+import {BookingDayDTO} from './dtos/bookingdataDTO';
 
 interface UserState { user: UserDTO | null }
 
@@ -14,6 +15,8 @@ interface TableListState { tableList?: TableListDTO[] }
 interface TableState { user: TableDTO }
 
 interface SnackState { snackList?: SnackDTO[] }
+
+interface BookingListState {bookingList?: BookingDayDTO[]}
 
 interface GetSnackOrderState{orderList?:OrderListDTO[]}
 
