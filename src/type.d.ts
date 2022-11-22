@@ -6,9 +6,11 @@ import {OrderListDTO} from './dtos/orderListDTO';
 
 interface UserState { user: UserDTO | null }
 
-type tableListStatus = 'available' | 'booked' | 'unavailable' | ''
+type tableListStatus = 'available' | 'booked' | 'occupied' | 'warning' | ''
 
 interface TableListState { tableList?: TableListDTO[] }
+
+interface TableState { user: TableDTO }
 
 interface SnackState { snackList?: SnackDTO[] }
 

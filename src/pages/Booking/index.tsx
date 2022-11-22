@@ -4,10 +4,10 @@ import BackButton from '../BackButton/backbutton';
 import { connect } from 'react-redux'
 import { Dialog, DialogContent, DialogContentText } from '@mui/material'
 import {bookingTable} from '../../store/actions/tableAction'
-import { TableState } from '../../type';
 import {useLocation, useNavigate} from 'react-router-dom'
 import { useState } from 'react';
 import TableBooking from '../Webhook/tablebooking'
+import {TableState} from "../../type";
 
 const Booking = (props: any): JSX.Element => {
     const DateValue = React.useRef<HTMLInputElement>(null)
@@ -41,18 +41,7 @@ const Booking = (props: any): JSX.Element => {
     const handleDialogClose = React.useCallback(() => {
         setDialogOpen(false)
         navigate('/')
-    }, [])
-
-    const [formData, setFormData] = useState({
-        data:{
-            UserID: userId,
-            TableNo: tableId,
-            booking_date: '',
-            booking_starttime: '',
-            booking_endtime: '',
-        },
-        error: {},
-    });
+    }, [navigate])
 
     const {Send}=TableBooking();
 

@@ -15,7 +15,9 @@ import DataVis from "./pages/TopSales";
 const App = (): any => {
   const { sessionId, setSessionId, resetSessionId } = SessionChecker()
 
-  if (sessionId === null) {
+  console.log(sessionId)
+
+  if (sessionId === undefined || sessionId === null) {
     return (
       <BrowserRouter>
         <Routes>
