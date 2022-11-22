@@ -8,7 +8,7 @@ import {useLocation, useNavigate} from 'react-router-dom'
 import TableBooking from '../Webhook/tablebooking'
 import {BookingDTO} from "../../dtos/bookingDTO";
 import {BookingState, tableListStatus} from "../../type";
-import {Client} from "paho-mqtt";
+import {Client, Message} from "paho-mqtt";
 import {TableListDTO} from "../../dtos/tableListDTO";
 import {resetTableList, updateTableStatus} from "../../store/actions/tableListAction";
 
@@ -34,7 +34,6 @@ client.connect({
     useSSL: true,
     onSuccess: () => {
         console.log('Connected')
-        client.subscribe('table1/status')
     },
     onFailure: () => {
         console.log('Could not connect to MQTT Broker', 'is-error')
@@ -65,8 +64,6 @@ const Booking = (props: BookingProps): JSX.Element => {
 
         const updatedTableData = { tableId: bookingData.tableId, status: 'booked' as tableListStatus }
 
-        console.log(updatedTableData)
-
         if (props.updateTableStatus !== undefined) {
             props.updateTableStatus(updatedTableData)
         }
@@ -80,8 +77,23 @@ const Booking = (props: BookingProps): JSX.Element => {
     },[props, tableId, userId])
 
     const handleDialogClose = React.useCallback(() => {
+        const updatedTableData = { tableId: tableId, status: 'booked' as tableListStatus }
+
         setDialogOpen(false)
         navigate('/')
+
+        if (client.isConnected()) {
+            const newStatus = {
+                data: {
+                    tableNumber: updatedTableData.tableId,
+                    status: updatedTableData.status
+                }
+            }
+            const message = new Message(JSON.stringify(newStatus));
+            message.destinationName = 'table1/status';
+            message.qos = 0;
+            client.send(message);
+        }
     }, [navigate])
 
     const {Send}=TableBooking();
@@ -90,7 +102,7 @@ const Booking = (props: BookingProps): JSX.Element => {
         const booking_detail = Object.entries(bookingData)
             .map((d) => `${d[0]}: ${d[1]}`)
             .join("\n");
-        // Send(booking_detail);
+        Send(booking_detail);
     };
 
     return (

@@ -63,7 +63,7 @@ const Table = (props: tableProps): JSX.Element => {
       props.resetTableList()
     }
 
-    window.location.reload();
+    window.location.reload()
   }
 
   React.useEffect(() => {
@@ -116,8 +116,6 @@ const Table = (props: tableProps): JSX.Element => {
       client.send(message);
       console.log("Sent");
     }
-
-    window.location.reload();
   }, [currentTableId, props.tableList])
 
   return (
