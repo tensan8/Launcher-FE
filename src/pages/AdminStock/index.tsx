@@ -158,10 +158,10 @@ const Stock = (props:SnacksProps): JSX.Element => {
     };
 
     const datavisual2 = {
-      labels: [0,1,2,3,4,5,6] ,
+      labels: ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"] ,
       datasets: [{
       label: 'Day',
-      data: [2,4,5,1,0,0,0],
+      data: bookingday,
       backgroundColor: [
         'rgb(153, 255, 255)'
       ],
