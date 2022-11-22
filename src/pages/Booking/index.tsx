@@ -4,12 +4,43 @@ import BackButton from '../BackButton/backbutton';
 import { connect } from 'react-redux'
 import { Dialog, DialogContent, DialogContentText } from '@mui/material'
 import {bookingTable} from '../../store/actions/tableAction'
-import { TableState } from '../../type';
 import {useLocation, useNavigate} from 'react-router-dom'
-import { useState } from 'react';
 import TableBooking from '../Webhook/tablebooking'
+import {BookingDTO} from "../../dtos/bookingDTO";
+import {BookingState, tableListStatus} from "../../type";
+import {Client, Message} from "paho-mqtt";
+import {TableListDTO} from "../../dtos/tableListDTO";
+import {resetTableList, updateTableStatus} from "../../store/actions/tableListAction";
 
-const Booking = (props: any): JSX.Element => {
+interface BookingProps {
+    booking?: BookingDTO
+    bookingTable?: (bookingData: BookingDTO) => {}
+    resetTableList?: () => {}
+    updateTableStatus?: (table: TableListDTO) => {}
+}
+
+const clientId = `website-${Math.random() * 100}`
+
+const client = new Client(
+    '81c6a3b298404ce4bf472251fbd6c76a.s1.eu.hivemq.cloud',
+    +('8884'),
+    clientId
+)
+
+client.connect({
+    userName: 'dashboard',
+    password: 'Tabletracking1',
+    cleanSession: true,
+    useSSL: true,
+    onSuccess: () => {
+        console.log('Connected')
+    },
+    onFailure: () => {
+        console.log('Could not connect to MQTT Broker', 'is-error')
+    }
+})
+
+const Booking = (props: BookingProps): JSX.Element => {
     const DateValue = React.useRef<HTMLInputElement>(null)
     const StartTimeValue = React.useRef<HTMLInputElement>(null)
     const EndTimeValue = React.useRef<HTMLInputElement>(null)
@@ -19,124 +50,132 @@ const Booking = (props: any): JSX.Element => {
     const {userId, tableId} = state
 
     const handleSubmit = React.useCallback((e: React.SyntheticEvent) =>{
-        const tabledata = {
-            UserName: '1',
-            TableID: "1",
-            Date: DateValue.current?.value,
-            StartTime: StartTimeValue.current?.value,
-            EndTime: EndTimeValue.current?.value
+        const bookingData: BookingDTO = {
+            tableId: tableId,
+            userId: userId,
+            bookingDate: DateValue.current?.value!,
+            bookingStartTime: StartTimeValue.current?.value!,
+            bookingEndTime: EndTimeValue.current?.value!
+        }
+        if(props.bookingTable !== undefined) {
+            props.bookingTable(bookingData)
         }
         e.preventDefault()
-        PostToDiscord(tabledata);
-    },[])
 
-    React.useEffect(() => {
-        if (props.user.user === 201) {
-          setDialogOpen(true)
-        } else {
-          setDialogOpen(false)
+        const updatedTableData = { tableId: bookingData.tableId, status: 'booked' as tableListStatus }
+
+        if (props.updateTableStatus !== undefined) {
+            props.updateTableStatus(updatedTableData)
         }
-      }, [props.user.user])
-    
+
+        if (props.resetTableList !== undefined) {
+            props.resetTableList()
+        }
+
+        PostToDiscord(bookingData);
+        setDialogOpen(true);
+    },[props, tableId, userId])
+
     const handleDialogClose = React.useCallback(() => {
+        const updatedTableData = { tableId: tableId, status: 'booked' as tableListStatus }
+
         setDialogOpen(false)
         navigate('/')
-    }, [])
 
-    // const [formData, setFormData] = useState({
-    //     data:{
-    //         UserID: userId,
-    //         TableNo: tableId,
-    //         booking_date: '',
-    //         booking_starttime: '',
-    //         booking_endtime: '',
-    //     },
-    //     error: {},
-    // });
+        if (client.isConnected()) {
+            const newStatus = {
+                data: {
+                    tableNumber: updatedTableData.tableId,
+                    status: updatedTableData.status
+                }
+            }
+            const message = new Message(JSON.stringify(newStatus));
+            message.destinationName = 'table1/status';
+            message.qos = 0;
+            client.send(message);
+        }
+    }, [navigate])
 
     const {Send}=TableBooking();
 
-    const PostToDiscord = (tableData: {[key: string]: any}) => {
-        const booking_detail = Object.entries(tableData)
-        .map((d) => `${d[0]}: ${d[1]}`)
-        .join("\n");
-        console.log(booking_detail)
-        // Send(booking_detail);
+    const PostToDiscord = (bookingData: {[key: string]: any}) => {
+        const booking_detail = Object.entries(bookingData)
+            .map((d) => `${d[0]}: ${d[1]}`)
+            .join("\n");
+        Send(booking_detail);
     };
 
     return (
         <div>
-            <div className='mx-16 my-[-20px]  absolute'>
             <BackButton backPath = {-1}/>
-            </div>
-        <div className="grid place-items-center my-16">
-            <div className='flex my-3'>
-                <h1 className='font-bold text-5xl text-white my-auto'>Neko Neko Nyaa</h1>
-                <img src={logo} alt="logo" className='w-16'/>
-            </div>
-            
-            <form 
-            className=" p-7 rounded-lg shadow-lg bg-cyan-700 w-[32rem]"
-            onSubmit={handleSubmit}
-            >
-                <div className='mb-10 flow-root'>
-                    <div className='flex text-xl font-bold float-left'>
-                        <p>UserID: </p>
-                        <p className='ml-1'>{userId}</p>
-                    </div>
-                    <div className='flex text-xl font-bold float-right'>
-                        <p>TableNo:</p>
-                        <p className='ml-1'>{tableId}</p>
-                    </div>
+            <div className="grid place-items-center my-16">
+                <div className='flex my-3'>
+                    <h1 className='font-bold text-5xl text-white my-auto'>Neko Neko Nyaa</h1>
+                    <img src={logo} alt="logo" className='w-16'/>
                 </div>
-                <div className='flex my-2'>
-                    <label className='my-auto w-52 text-xl font-bold'>Select a date: </label>
-                    <input 
-                    type="date" 
-                    id="booking_date"
-                    name = "booking_date" 
-                    placeholder='Name' 
-                    required 
-                    className='rounded-lg px-3 py-2 text-lg w-full'
-                    ref={DateValue}/>    
-                </div>
-                <p className='font-bold text-2xl mt-10'>Time (Opening Hour 1:00PM - 11:00PM)</p>
-                <div className='my-2 mt-5'>
-                    <div className='flex'>
-                        <label htmlFor='booking_starttime' className='font-bold text-xl w-52'>Start Time: </label>
-                        <input 
-                        type="time" 
-                        id="booking_starttime" 
-                        name="booking_starttime"
-                        required 
-                        className='rounded-lg text-lg px-2 w-full'
-                        ref={StartTimeValue}/>
+
+                <form
+                    className=" p-7 rounded-lg shadow-lg bg-cyan-700 w-[32rem]"
+                    onSubmit={handleSubmit}
+                >
+                    <div className='mb-10 flow-root'>
+                        <div className='flex text-xl font-bold float-left'>
+                            <p>UserID: </p>
+                            <p className='ml-1'>{userId}</p>
+                        </div>
+                        <div className='flex text-xl font-bold float-right'>
+                            <p>TableNo:</p>
+                            <p className='ml-1'>{tableId}</p>
+                        </div>
                     </div>
                     <div className='flex my-2'>
-                        <label htmlFor='booking_endtime' className='font-bold text-xl w-52'>Finish Time: </label>
-                        <input 
-                        type="time" 
-                        id="booking_endtime"
-                        name="booking_endtime"
-                        required 
-                        className='rounded-lg text-lg px-2 w-full'
-                        ref={EndTimeValue}/>
+                        <label className='my-auto w-52 text-xl font-bold'>Select a date: </label>
+                        <input
+                            type="date"
+                            id="booking_date"
+                            name = "booking_date"
+                            placeholder='Name'
+                            required
+                            className='rounded-lg px-3 py-2 text-lg w-full'
+                            ref={DateValue}/>
                     </div>
-                </div>
-                <input type="submit" className='w-full bg-[#3274d6] hover:bg-[#2868c7] text-white font-medium py-2 mt-8 cursor-pointer transition duration-200'/>
-            </form>
-            <Dialog open={isDialogOpen} onClose={ handleDialogClose } >
-                <DialogContent>
-                    <DialogContentText>
-                        Booking Success!
-                    </DialogContentText>
-                </DialogContent>
-            </Dialog>
+                    <p className='font-bold text-2xl mt-10'>Time (Opening Hour 1:00PM - 11:00PM)</p>
+                    <div className='my-2 mt-5'>
+                        <div className='flex'>
+                            <label htmlFor='booking_starttime' className='font-bold text-xl w-52'>Start Time: </label>
+                            <input
+                                type="time"
+                                id="booking_starttime"
+                                name="booking_starttime"
+                                required
+                                className='rounded-lg text-lg px-2 w-full'
+                                ref={StartTimeValue}/>
+                        </div>
+                        <div className='flex my-2'>
+                            <label htmlFor='booking_endtime' className='font-bold text-xl w-52'>Finish Time: </label>
+                            <input
+                                type="time"
+                                id="booking_endtime"
+                                name="booking_endtime"
+                                required
+                                className='rounded-lg text-lg px-2 w-full'
+                                ref={EndTimeValue}/>
+                        </div>
+                    </div>
+                    <input type="submit" className='w-full bg-[#3274d6] hover:bg-[#2868c7] text-white font-medium py-2 mt-8 cursor-pointer transition duration-200'/>
+                </form>
+                <Dialog open={isDialogOpen} onClose={ handleDialogClose } >
+                    <DialogContent>
+                        <DialogContentText>
+                            Booking Success!
+                        </DialogContentText>
+                    </DialogContent>
+                </Dialog>
+            </div>
         </div>
-        </div>
-  )
+    )
 }
 
-const mapStateToProps = (userState:TableState):any =>({user: userState.user})
+const mapStateToProps = (bookingState: BookingState):any =>({booking: bookingState.booking})
 
-export default connect(mapStateToProps, {bookingTable})(Booking)
+export default connect(mapStateToProps, {bookingTable, updateTableStatus, resetTableList})(Booking)

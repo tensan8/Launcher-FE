@@ -16,3 +16,21 @@ export const getAllSnacks = (): any => {
         }
     }
 }
+
+export const updateSnack = (snackId: number, updatedData: {name?: string, currentStock?: string, price?: string}): any => {
+    return async () => {
+        try {
+            await axios.put(`${process.env.REACT_APP_HOST ?? ''}/snack/${snackId}` ?? '', updatedData)
+        } catch (err) {
+            console.log(err)
+        }
+    }
+}
+
+export const resetSnack = (): any => {
+    return async (dispatch: Dispatch) => {
+        dispatch({
+            type: actionTypes.RESET_SNACK
+        })
+    }
+}

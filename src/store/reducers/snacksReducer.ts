@@ -11,6 +11,8 @@ const snacksReducer = (state: SnackState = initialState, action: ActionTemplate<
                 ...state,
                 snackList: action.data
             }
+        case actionTypes.RESET_SNACK:
+            return initialState
         default:
             return {
                 ...state

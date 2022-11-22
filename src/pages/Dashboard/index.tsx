@@ -2,6 +2,7 @@ import * as React from 'react'
 import logo from '../../images/nekonya.jpg'
 import drinks from '../../images/drink.png'
 import table from '../../images/table.jpg'
+import vis_illustration from '../../images/vis_illustration.jpg'
 import './index.css'
 import {useNavigate} from "react-router-dom";
 import {connect} from "react-redux";
@@ -9,6 +10,7 @@ import {getUser, resetUser} from "../../store/actions/userActions";
 import {getAllTableStatus, resetTableList, updateTableStatus} from "../../store/actions/tableListAction";
 import {TableListState, UserState} from "../../type";
 import {UserDTO} from "../../dtos/userDTO";
+import {Client} from "paho-mqtt";
 
 interface DashboardProps {
     sessionId: any
@@ -55,7 +57,13 @@ const Dashboard = (props: DashboardProps): JSX.Element => {
                                 <img src={drinks} alt="drinks" />
                                 <span>Snacks</span>
                             </div>
-                        :   <div> Admin </div>
+                        :   <div className="catbox cursor-pointer" onClick={(e) => {
+                                e.preventDefault()
+                                navigate("/stock")
+                            }}>
+                                <img src={vis_illustration} alt="illustration" />
+                                <span>Stock</span>
+                            </div>
                     }
 
                     <div className="catbox cursor-pointer" onClick={(e) => {
