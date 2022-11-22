@@ -5,7 +5,7 @@ import './index.css'
 import BackButton from '../BackButton/backbutton';
 import {GetSnackOrderState, SnackState} from "../../type";
 import {connect} from "react-redux";
-import {getAllSnacks} from "../../store/actions/snacksAction";
+import {getAllSnacks, resetSnack, updateSnack} from "../../store/actions/snacksAction";
 import {GetAllOrder} from "../../store/actions/orderListAction";
 import {SnackDTO} from "../../dtos/snackDTO";
 import { OrderListDTO } from '../../dtos/orderListDTO';
@@ -19,6 +19,7 @@ import {
     Tooltip,
     Legend,
   } from 'chart.js';
+import {Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField} from "@mui/material";
 
   ChartJS.register(
     CategoryScale,
@@ -48,19 +49,30 @@ interface SnacksProps {
     orderList?: {orderList:OrderListDTO[]}
     getAllSnacks?: () => {}
     GetAllOrder?: () =>{}
+    updateSnack?: (snackId: number, updatedData: {name?: string, currentStock?: string, price?: string}) => {}
+    resetSnack?: () => {}
 }
 
 const Stock = (props:SnacksProps): JSX.Element => {
-
+    const [isDialogOpen, setIsDialogOpen] = React.useState(false)
+    const [targetSnack, setTargetSnack] = React.useState<SnackDTO>()
+    const snackNameRef= React.useRef<HTMLInputElement>(null)
+    const priceRef = React.useRef<HTMLInputElement>(null)
+    const stockRef = React.useRef<HTMLInputElement>(null)
     const itemname:String[] = []
     const itemquantity: number[] = []
 
     React.useEffect(()=>{
       if(props.getAllSnacks !== undefined && props.GetAllOrder !== undefined){
-        props.getAllSnacks()
-        props.GetAllOrder()
+        if (props.orderList?.orderList.length === 0) {
+          props.GetAllOrder()
+        }
+
+        if (props.snackList?.snackList.length === 0) {
+          props.getAllSnacks()
+        }
       }
-    }, [])
+    }, [props, props.snackList?.snackList.length])
 
     React.useEffect(()=>{
 
@@ -80,7 +92,7 @@ const Stock = (props:SnacksProps): JSX.Element => {
       }
     },[props.orderList?.orderList]);
 
-    const [datavisual] = useState({
+    const datavisual = {
       type:'bar',
       labels: itemname,
       datasets: [{
@@ -92,37 +104,106 @@ const Stock = (props:SnacksProps): JSX.Element => {
       borderColor:'black',
       borderWidth: 1,
       }]
-    });
+    };
+
+    const handleEdit = React.useCallback((targetSnack: SnackDTO) => {
+        setTargetSnack(targetSnack)
+        setIsDialogOpen(true)
+    }, [])
+
+    const updateSnack = React.useCallback(() => {
+        const updatedData = {
+            name: snackNameRef.current?.value,
+            currentStock: stockRef.current?.value,
+            price: priceRef.current?.value
+        }
+
+        if (props.updateSnack !== undefined && targetSnack !== undefined) {
+            props.updateSnack(targetSnack?.snackId, updatedData)
+        }
+
+        if (props.resetSnack !== undefined) {
+            props.resetSnack()
+        }
+
+        setIsDialogOpen(false)
+    }, [props, targetSnack])
 
     return (
         <div>
         <BackButton backPath = "/"/>
+
+        <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)} fullWidth={true} maxWidth='sm'>
+            <DialogTitle>Update Snack</DialogTitle>
+            <DialogContent>
+                <TextField
+                    required
+                    autoFocus
+                    margin="normal"
+                    placeholder={targetSnack?.name}
+                    label="Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    inputRef={snackNameRef}
+                />
+                <TextField
+                    required
+                    autoFocus
+                    margin="normal"
+                    placeholder={targetSnack?.price.toString()}
+                    label="Price"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    inputRef={priceRef}
+                />
+                <TextField
+                    required
+                    autoFocus
+                    margin="normal"
+                    placeholder={targetSnack?.currentStock.toString()}
+                    label="Stock"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                    inputRef={stockRef}
+                />
+            </DialogContent>
+            <DialogActions>
+                <Button onClick={updateSnack}>Confirm</Button>
+            </DialogActions>
+        </Dialog>
+
         <div className="database-container">
             <table className="db-table">
             <thead>
-            <tr>
-                <th>Name</th>
-                <th>Price</th>
-                <th>Stock</th>
-                <th>Action</th>
-            </tr>
+                <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Stock</th>
+                    <th>Action</th>
+                </tr>
             </thead>
+
             {props.snackList !== undefined &&
-            props.snackList.snackList.length > 0 &&
-            props.snackList.snackList.map((snack: SnackDTO, index: number) => {
-            return(
-            <tbody>
-              <tr key={index}>
-                <td className='text-left'>{snack.name}</td>
-                <td>{snack.price}</td>
-                <td>{snack.currentStock}</td>
-                <td><button>Edit</button></td>
-              </tr>
-            </tbody>
-            )
-          })}
+                props.snackList.snackList.length > 0 &&
+                props.snackList.snackList.map((snack: SnackDTO, index: number) => {
+                    return(
+                        <tbody>
+                          <tr key={index}>
+                            <td className='text-left'>{snack.name}</td>
+                            <td>{snack.price}</td>
+                            <td>{snack.currentStock}</td>
+                            <td><button onClick={() => handleEdit(snack)}>Edit</button></td>
+                          </tr>
+                        </tbody>
+                    )
+                })
+            }
             </table>
         </div>
+
         <div className='mx-auto w-[1000px] bg-stone-400 p-4 my-10'>
           <Bar
           data={datavisual}
@@ -139,107 +220,4 @@ const mapStateToProps=(snackState: SnackState | GetSnackOrderState):any =>({
 });
 
 
-export default connect(mapStateToProps,{getAllSnacks,GetAllOrder})(Stock);
-
-// const [dataSource, setdataSource] = useState([]);
-// const [editingValue, setEditValue] = useState([null]);
-
-// useEffect(()=>{
-//     const data = [];
-//     for (let index = 0; index < 7; index++){
-//         data.push({
-//             key: `${index}`,
-//             name: `Name ${index}`,
-//             quantity: `Quantity ${index}`,
-//         });
-//     }
-//     // setdataSource(data);
-// },[]);
-
-// const columns = [
-//     {
-//         title:'Name',
-//         dataIndex: 'name',
-//     },
-//     {
-//         title: 'Quantity',
-//         dataIndex: 'quantity',
-
-//         render:(text:any, record:any)=>{
-//             if(editingValue === record.key){
-//                 return (
-//                     <Form.Item
-//                     name = 'name'
-//                     rules={[{
-//                         required:true,
-//                         message:"Please enter value",
-//                     },
-//                 ]}
-//                 >
-//                     <Input/>
-//                 </Form.Item>
-//                 )
-//             }else{
-//                 return <p>{text}</p>
-//             }
-//         }
-//     },
-//     {
-//         title: 'Actions',
-//         render: (_: any,record:any)=>{
-//             return (
-//                 <div>
-//                     <Button type='link' onClick={()=>{
-//                         setEditValue(record.key)
-//                     }}>Edit</Button>
-//                     <Button type='link'>Save</Button>
-//                 </div>
-//             );
-//         },
-//     },
-// ];
-
-// return(
-//     <div>
-//         <header>
-//             <Form>
-//                 <Table
-//                 columns={columns}
-//                 dataSource={dataSource}>
-
-//                 </Table>
-//             </Form>
-//         </header>
-//     </div>
-// );
-
-// const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-//     const [data, setData] = useState({
-//         labels: labels,
-//         datasets: [{
-//         label: 'Expenses by Month',
-//         data: [65, 59, 80, 81, 56, 55, 40],
-//         backgroundColor: [
-//             'rgb(153, 102, 255)'
-//         ],
-//         borderColor: [
-//             'rgb(153, 102, 255)'
-//         ],
-//         borderWidth: 1
-//         }]
-//     });
-
-//     const [chartData, setChartData] = useState({
-//       labels: Data.map((data) => data.year), 
-//       datasets: [
-//         {
-//           label: "Users Gained ",
-//           data: Data.map((data) => data.userGain),
-//           backgroundColor: [
-//             "rgba(75,192,192,1)"
-//           ],
-//           borderColor: "black",
-//           borderWidth: 2
-//         }
-//       ]
-//     });
+export default connect(mapStateToProps,{getAllSnacks,GetAllOrder, updateSnack, resetSnack})(Stock);
