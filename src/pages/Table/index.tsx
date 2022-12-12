@@ -116,6 +116,8 @@ const Table = (props: tableProps): JSX.Element => {
       client.send(message);
       console.log("Sent");
     }
+
+    // window.location.reload();
   }, [currentTableId, props.tableList])
 
   return (
